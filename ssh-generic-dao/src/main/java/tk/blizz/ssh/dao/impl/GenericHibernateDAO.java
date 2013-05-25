@@ -1,45 +1,71 @@
 package tk.blizz.ssh.dao.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Map;
+
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Example;
 
 import tk.blizz.ssh.dao.GenericDAO;
 
-public abstract class GenericHibernateDAO<PK extends Serializable, E>
-		implements GenericDAO<PK, E> {
+public abstract class GenericHibernateDAO<T, PK extends Serializable>
+		implements GenericDAO<T, PK> {
+	private final Class<T> persistentClass;
+
+	private SessionFactory sessionFactory;
+
+	@SuppressWarnings("unchecked")
+	public GenericHibernateDAO() {
+		this.persistentClass = (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
 	/**
 	 * find element by primary key
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public E findById(PK id) {
-		return null;
+	@SuppressWarnings("unchecked")
+	public T findById(PK id) {
+		return (T) getSession().load(this.persistentClass, id);
 	}
 
 	/**
 	 * persistent element
 	 * 
-	 * @param e
+	 * @param entity
 	 */
-	public void save(E e) {
+	public void save(T entity) {
+		getSession().save(entity);
 	}
 
 	/**
-	 * update element
+	 * update persistent entity
 	 * 
-	 * @param e
+	 * @param persistentEntity
 	 */
-	public void update(E e) {
+	public void update(T persistentEntity) {
+		getSession().update(persistentEntity);
 	}
 
 	/**
-	 * delete element
 	 * 
-	 * @param e
 	 */
-	public void delete(E e) {
+	public void saveOrUpdate(T entity) {
+		getSession().saveOrUpdate(entity);
+	}
+
+	/**
+	 * delete persistent entity
+	 * 
+	 * @param persistentEntity
+	 */
+	public void delete(T persistentEntity) {
+		getSession().delete(persistentEntity);
 	}
 
 	/**
@@ -47,26 +73,46 @@ public abstract class GenericHibernateDAO<PK extends Serializable, E>
 	 * 
 	 * @return
 	 */
-	public List<E> findAll() {
-		return null;
+	@SuppressWarnings("unchecked")
+	public List<T> findAll() {
+		return createCriteria().list();
 	}
 
 	/**
-	 * find any elements by given example
+	 * find any elements by given example instance
 	 * 
-	 * @param e
+	 * @param example
 	 * @return
 	 */
-	public List<E> findByExample(E e) {
-		return null;
+	@SuppressWarnings("unchecked")
+	public List<T> findByExample(T example) {
+		return createCriteria().add(Example.create(example)).list();
 	}
 
 	/**
+	 * get new Criteria
 	 * 
-	 * @param map
 	 * @return
 	 */
-	public List<E> findByProperties(Map<String, Object> map) {
-		return null;
+	protected Criteria createCriteria() {
+		return getSession().createCriteria(this.persistentClass);
+	}
+
+	/**
+	 * get current session
+	 * 
+	 * @return
+	 */
+	protected Session getSession() {
+		return this.sessionFactory.getCurrentSession();
+	}
+
+	// getters and setters
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 }

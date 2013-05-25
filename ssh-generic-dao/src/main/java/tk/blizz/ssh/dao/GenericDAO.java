@@ -2,58 +2,56 @@ package tk.blizz.ssh.dao;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
-public interface GenericDAO<PK extends Serializable, E> {
+public interface GenericDAO<T, PK extends Serializable> {
 	/**
-	 * find element by primary key
+	 * find entity by primary key
 	 * 
 	 * @param id
 	 * @return
 	 */
-	E findById(PK id);
+	T findById(PK id);
 
 	/**
-	 * persistent element
+	 * persist entity
 	 * 
-	 * @param e
+	 * @param entity
 	 */
-	void save(E e);
+	void save(T entity);
 
 	/**
-	 * update element
+	 * update entity
 	 * 
-	 * @param e
+	 * @param entity
 	 */
-	void update(E e);
+	void update(T persistentEntity);
 
 	/**
-	 * delete element
+	 * save if entity not persisted, or update otherwise
 	 * 
-	 * @param e
+	 * @param entity
 	 */
-	void delete(E e);
+	void saveOrUpdate(T entity);
 
 	/**
-	 * find all elements
+	 * delete entity
+	 * 
+	 * @param entity
+	 */
+	void delete(T persistentEntity);
+
+	/**
+	 * find all entities
 	 * 
 	 * @return
 	 */
-	List<E> findAll();
+	List<T> findAll();
 
 	/**
-	 * find any elements by given example
+	 * find any entity by given entity example
 	 * 
-	 * @param e
+	 * @param example
 	 * @return
 	 */
-	List<E> findByExample(E e);
-
-	/**
-	 * 
-	 * @param map
-	 * @return
-	 */
-	List<E> findByProperties(Map<String, Object> map);
-
+	List<T> findByExample(T example);
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import tk.blizz.ssh.model.User;
 
-public interface UserDAO extends GenericDAO<Long, User> {
+public interface UserDAO extends GenericDAO<User, Long> {
 	/**
 	 * find any users by user's name
 	 * 

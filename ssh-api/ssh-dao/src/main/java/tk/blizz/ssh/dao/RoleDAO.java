@@ -4,7 +4,7 @@ import java.util.List;
 
 import tk.blizz.ssh.model.Role;
 
-public interface RoleDAO extends GenericDAO<Long, Role> {
+public interface RoleDAO extends GenericDAO<Role, Long> {
 	/**
 	 * find all Roles by role name
 	 * 
