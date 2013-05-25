@@ -11,5 +11,6 @@
   	<module>ssh-web</module>
   	<module>ssh-utils</module>
   	<module>ssh-impl</module>
+  	<module>ssh-generic-dao</module>
   </modules>
 </project>
