@@ -1,0 +1,14 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# eclipse setting files #
+.classpath
+.project
+.settings
+
+# mvn target #
+target
