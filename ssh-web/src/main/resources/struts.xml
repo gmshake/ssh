@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+		"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.custom.i18n.resources" value="global" />
+	<constant name="struts.devMode" value="true" />
+
+	<constant name="struts.action.extension" value="action" />
+
+	<package name="default" namespace="/" extends="struts-default">
+		<action name="hello" class="tk.blizz.ssh.action.HelloAction">
+			<result name="success">index.jsp</result>
+		</action>
+	</package>
+
+	<package name="json" namespace="/" extends="json-default">
+		<action name="jsonHello" class="tk.blizz.ssh.action.HelloAction"
+			method="jsonHello">
+			<result name="success" type="json" />
+		</action>
+	</package>
+
+</struts>
