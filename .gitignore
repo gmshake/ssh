@@ -1,3 +1,4 @@
+# Java class file
 *.class
 
 # Package Files #
@@ -12,4 +13,7 @@
 
 # mvn target #
 target
+
+# Mac OS X meta file
+.DS_Store
 
