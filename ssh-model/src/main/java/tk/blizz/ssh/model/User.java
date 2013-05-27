@@ -8,6 +8,7 @@ public class User implements Serializable {
 
 	private Long id;
 	private String name;
+	private String lastName;
 	private String password;
 	private Date birthday;
 
@@ -15,7 +16,7 @@ public class User implements Serializable {
 	 * @return the id
 	 */
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -31,7 +32,7 @@ public class User implements Serializable {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -44,10 +45,26 @@ public class User implements Serializable {
 	}
 
 	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	/**
+	 * @param lastName
+	 *            the lastName to set
+	 */
+	public User setLastName(String lastName) {
+		this.lastName = lastName;
+		return this;
+	}
+
+	/**
 	 * @return the password
 	 */
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	/**
@@ -63,7 +80,7 @@ public class User implements Serializable {
 	 * @return the birthday
 	 */
 	public Date getBirthday() {
-		return birthday;
+		return this.birthday;
 	}
 
 	/**
