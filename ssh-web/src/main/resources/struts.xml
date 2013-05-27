@@ -20,4 +20,25 @@
 		</action>
 	</package>
 
+	<package name="report" namespace="/" extends="struts-default">
+		<result-types>
+			<result-type name="jasper"
+				class="org.apache.struts2.views.jasperreports.JasperReportsResult" />
+		</result-types>
+
+		<action name="getReport" class="tk.blizz.ssh.action.ReportAction">
+			<result name="success" type="jasper">
+				<param name="location">${reportLocation}</param>
+				<param name="dataSource">datasource</param>
+				<param name="format">PDF</param>
+			</result>
+			<result name="dhtml" type="stream">
+				<param name="contentType">text/html;charset=UTF-8</param>
+				<param name="inputName">report</param>
+				<param name="contentDisposition">filename=${downloadFileName}</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+	</package>
+
 </struts>
