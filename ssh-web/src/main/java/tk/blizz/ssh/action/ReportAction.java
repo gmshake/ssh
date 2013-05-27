@@ -39,7 +39,8 @@ public class ReportAction extends ActionSupport {
 		File file = new File(getReportDir().getAbsolutePath(), this.reportName
 				+ ".xml");
 
-		File out = new File("/tmp/", this.reportName + ".jasper");
+		File out = new File(getReportDir() + "/tmp/", this.reportName
+				+ ".jasper");
 
 		if (!file.exists())
 			throw new IOException(new FileNotFoundException(
@@ -72,7 +73,7 @@ public class ReportAction extends ActionSupport {
 	}
 
 	public String getReportLocation() {
-		File file = new File("/tmp/", this.reportName + ".jasper");
+		File file = new File("/reports/tmp/", this.reportName + ".jasper");
 		return file.getAbsolutePath();
 	}
 
