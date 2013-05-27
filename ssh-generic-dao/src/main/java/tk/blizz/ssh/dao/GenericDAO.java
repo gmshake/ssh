@@ -3,7 +3,17 @@ package tk.blizz.ssh.dao;
 import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDAO<T, PK extends Serializable> {
+/**
+ * GenericDAO CRUD
+ * 
+ * @author zlei.huang@gmail.com 2013-05-25
+ * 
+ * @param <T>
+ *            Entity class
+ * @param <PK>
+ *            Entity primary key
+ */
+public interface GenericDAO<T, PK extends Serializable> extends Serializable {
 	/**
 	 * find entity by primary key
 	 * 
@@ -13,11 +23,11 @@ public interface GenericDAO<T, PK extends Serializable> {
 	T findById(PK id);
 
 	/**
-	 * persist entity
+	 * save transient instance
 	 * 
 	 * @param entity
 	 */
-	void save(T entity);
+	PK save(T entity);
 
 	/**
 	 * update entity
@@ -32,6 +42,14 @@ public interface GenericDAO<T, PK extends Serializable> {
 	 * @param entity
 	 */
 	void saveOrUpdate(T entity);
+
+	/**
+	 * merge detached entity
+	 * 
+	 * @param detachedEntity
+	 * @return
+	 */
+	T merge(T detachedEntity);
 
 	/**
 	 * delete entity
