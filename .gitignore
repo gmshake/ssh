@@ -14,6 +14,9 @@
 # mvn target #
 target
 
+# jasper report compiled files #
+*.jasper
+
 # Mac OS X meta file
 .DS_Store
 
