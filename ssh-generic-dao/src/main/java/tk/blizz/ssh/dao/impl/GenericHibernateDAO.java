@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.NaturalIdLoadAccess;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
@@ -184,7 +185,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 *            a Native SQL string
 	 * @return
 	 */
-	protected Query createSQLQuery(String sql) {
+	protected SQLQuery createSQLQuery(String sql) {
 		return getSession().createSQLQuery(sql);
 	}
 
