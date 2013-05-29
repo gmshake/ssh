@@ -82,7 +82,7 @@
   			<configuration>
   				<sourceDirectory>${basedir}/src/main/resources/reports</sourceDirectory>
   				<sourceFileExt>.jrxml</sourceFileExt>
-  				<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/reports</outputDirectory>
+  				<outputDirectory>${basedir}/src/main/webapp/reports</outputDirectory>
   			</configuration>
   			<executions>
   				<execution>

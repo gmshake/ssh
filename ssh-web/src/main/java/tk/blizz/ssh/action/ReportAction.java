@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
@@ -24,6 +25,10 @@ public class ReportAction extends ActionSupport {
 	protected List<User> users;
 	protected String reportName;
 
+	private static final String FILEPATTERN = "^[a-zA-Z][a-zA-Z0-9_]*$";
+
+	private Pattern filePattern = Pattern.compile(FILEPATTERN);
+
 	protected File getReportDir() {
 		ServletContext context = ServletActionContext.getServletContext();
 		StringBuilder sb = new StringBuilder(128);
@@ -39,8 +44,7 @@ public class ReportAction extends ActionSupport {
 		File file = new File(getReportDir().getAbsolutePath(), this.reportName
 				+ ".xml");
 
-		File out = new File(getReportDir() + "/tmp/", this.reportName
-				+ ".jasper");
+		File out = new File(getReportDir(), this.reportName + ".jasper");
 
 		if (!file.exists())
 			throw new IOException(new FileNotFoundException(
@@ -60,7 +64,7 @@ public class ReportAction extends ActionSupport {
 
 	@Override
 	public String execute() throws IOException {
-		checkCompiledReport();
+		// checkCompiledReport();
 
 		this.users = new ArrayList<User>();
 		this.users.add(new User().setId(1L).setName("John")
@@ -72,8 +76,20 @@ public class ReportAction extends ActionSupport {
 		return SUCCESS;
 	}
 
+	@Override
+	public void validate() {
+		if (this.reportName == null || this.reportName.isEmpty()) {
+			throw new IllegalArgumentException("need fileName parameter");
+		}
+
+		if (!this.filePattern.matcher(this.reportName).matches()) {
+			throw new IllegalArgumentException("invalid fileName parameter");
+		}
+
+	}
+
 	public String getReportLocation() {
-		File file = new File("/reports/tmp/", this.reportName + ".jasper");
+		File file = new File("/reports/", this.reportName + ".jasper");
 		return file.getAbsolutePath();
 	}
 
@@ -82,7 +98,7 @@ public class ReportAction extends ActionSupport {
 	}
 
 	public InputStream getReport() throws Exception {
-		File file = new File("/tmp/", this.reportName + ".jasper");
+		File file = new File("/", this.reportName + ".jasper");
 
 		InputStream is = new FileInputStream(file);
 		return is;
