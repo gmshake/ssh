@@ -2,17 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>tk.blizz.ssh</groupId>
-    <artifactId>ssh-parent</artifactId>
+    <artifactId>ssh-generic-dao-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>ssh-impl</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>ssh-model-hibernate</module>
-  	<module>ssh-dao-hibernate</module>
-  	<module>ssh-service-impl</module>
-  </modules>
-  <properties>
-  	<hibernate.version>4.1.12.Final</hibernate.version>
-  </properties>
+  <artifactId>ssh-generic-dao-hibernate</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>tk.blizz.ssh</groupId>
+  		<artifactId>ssh-generic-dao</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

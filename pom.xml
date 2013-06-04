@@ -11,10 +11,11 @@
   	<module>ssh-web</module>
   	<module>ssh-utils</module>
   	<module>ssh-impl</module>
-  	<module>ssh-generic-dao</module>
+  	<module>ssh-generic-dao-parent</module>
   </modules>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<junit.version>4.8.2</junit.version>
   </properties>
   <build>
   	<plugins>

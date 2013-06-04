@@ -5,7 +5,13 @@
     <artifactId>ssh-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>ssh-generic-dao</artifactId>
+  <artifactId>ssh-generic-dao-parent</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+
+  <module>ssh-generic-dao</module>
+  <module>ssh-generic-dao-hibernate</module>
+  </modules>
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
@@ -28,11 +34,13 @@
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-api</artifactId>
   		<version>1.7.5</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
   		<artifactId>slf4j-log4j12</artifactId>
   		<version>1.7.5</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>commons-beanutils</groupId>
