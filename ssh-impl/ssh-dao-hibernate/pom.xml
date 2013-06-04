@@ -12,5 +12,27 @@
   		<artifactId>ssh-dao</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+  		<groupId>tk.blizz.ssh</groupId>
+  		<artifactId>ssh-generic-dao</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>tk.blizz.ssh</groupId>
+  		<artifactId>ssh-model-hibernate</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.8.2</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hsqldb</groupId>
+  		<artifactId>hsqldb</artifactId>
+  		<version>2.2.9</version>
+  	</dependency>
   </dependencies>
 </project>
