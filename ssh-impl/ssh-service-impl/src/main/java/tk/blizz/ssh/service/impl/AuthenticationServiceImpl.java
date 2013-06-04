@@ -7,26 +7,43 @@ import tk.blizz.ssh.dao.UserDAO;
 import tk.blizz.ssh.model.Role;
 import tk.blizz.ssh.model.User;
 import tk.blizz.ssh.service.AuthenticationService;
+import tk.blizz.ssh.service.ServiceCallBack;
 import tk.blizz.utils.HexToString;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
 	private UserDAO userDao;
 	private RoleDAO roleDao;
 
-	public List<User> getUserByName(String name) {
-		return this.userDao.findByUserName(name);
+	@Override
+	public List<User> getUserByName(String name,
+			ServiceCallBack<List<? extends User>>... callbacks) {
+
+		List<User> userList = this.userDao.findByUserName(name);
+
+		for (ServiceCallBack<List<? extends User>> callback : callbacks) {
+			callback.call(userList);
+		}
+		return userList;
 	}
 
-	public List<Role> getRoleByName(String name) {
-		return this.roleDao.findByRoleName(name);
+	@Override
+	public List<Role> getRoleByName(String name,
+			ServiceCallBack<List<? extends Role>>... callbacks) {
+		List<Role> roles = this.roleDao.findByRoleName(name);
+		for (ServiceCallBack<List<? extends Role>> callback : callbacks) {
+			callback.call(roles);
+		}
+		return roles;
 	}
 
+	@Override
 	public boolean isValidUserInfo(String name, String pwd) {
 		User user = new User().setName(name).setPassword(pwd);
 		List<User> l = this.userDao.findByExample(user);
 		return l.size() > 0;
 	}
 
+	@Override
 	public boolean isValidUserInfo(String name, String hashPwd, String salt) {
 		User user = new User().setName(name);
 		List<User> l = this.userDao.findByExample(user);
@@ -54,5 +71,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	public void setRoleDao(RoleDAO roleDao) {
 		this.roleDao = roleDao;
 	}
-
 }
