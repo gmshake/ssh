@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="tk.blizz.ssh.model">
+	<class name="Role" table="ROLE">
+		<id name="id" type="long" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" type="string">
+			<column name="NAME" />
+		</property>
+		<property name="createTime" type="date">
+			<column name="CREATETIME" />
+		</property>
+		<property name="description" type="string">
+			<column name="DESCRIPTION" />
+		</property>
+	</class>
+</hibernate-mapping>
