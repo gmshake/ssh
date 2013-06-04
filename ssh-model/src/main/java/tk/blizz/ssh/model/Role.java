@@ -15,59 +15,64 @@ public class Role implements Serializable {
 	 * @return the id
 	 */
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(Long id) {
+	public Role setId(Long id) {
 		this.id = id;
+		return this;
 	}
 
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
 	 * @param name
 	 *            the name to set
+	 * @return
 	 */
-	public void setName(String name) {
+	public Role setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	/**
 	 * @return the createTime
 	 */
 	public Date getCreateTime() {
-		return createTime;
+		return this.createTime;
 	}
 
 	/**
 	 * @param createTime
 	 *            the createTime to set
 	 */
-	public void setCreateTime(Date createTime) {
+	public Role setCreateTime(Date createTime) {
 		this.createTime = createTime;
+		return this;
 	}
 
 	/**
 	 * @return the description
 	 */
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
 	/**
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public Role setDescription(String description) {
 		this.description = description;
+		return this;
 	}
 }
