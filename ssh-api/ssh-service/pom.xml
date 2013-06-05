@@ -12,10 +12,5 @@
   		<artifactId>ssh-model</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<dependency>
-  		<groupId>tk.blizz.ssh</groupId>
-  		<artifactId>ssh-utils</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
   </dependencies>
 </project>

@@ -41,5 +41,10 @@
   		<version>0.0.1-SNAPSHOT</version>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>tk.blizz.ssh</groupId>
+  		<artifactId>ssh-utils</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
 </project>
