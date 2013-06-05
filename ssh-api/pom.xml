@@ -8,6 +8,7 @@
   <artifactId>ssh-api</artifactId>
   <packaging>pom</packaging>
   <modules>
+  	<module>ssh-model</module>
   	<module>ssh-dao</module>
   	<module>ssh-service</module>
   </modules>

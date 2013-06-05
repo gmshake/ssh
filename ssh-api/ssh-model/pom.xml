@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>tk.blizz.ssh</groupId>
-    <artifactId>ssh-parent</artifactId>
+    <artifactId>ssh-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>ssh-model</artifactId>
