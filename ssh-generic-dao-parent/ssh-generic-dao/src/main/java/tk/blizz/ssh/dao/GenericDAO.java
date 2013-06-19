@@ -13,7 +13,7 @@ import java.util.List;
  * @param <PK>
  *            Entity primary key
  */
-public interface GenericDAO<T, PK extends Serializable> extends Serializable {
+public interface GenericDAO<T, PK extends Serializable> {
 	/**
 	 * find entity by primary key
 	 * 
