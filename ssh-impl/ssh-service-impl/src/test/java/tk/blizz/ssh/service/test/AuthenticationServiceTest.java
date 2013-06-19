@@ -29,9 +29,9 @@ public class AuthenticationServiceTest {
 	org.hsqldb.server.Server server;
 	private SessionFactory sessionFactory;
 
-	AuthenticationServiceImpl auth = new AuthenticationServiceImpl();
+	private final AuthenticationServiceImpl auth = new AuthenticationServiceImpl();
 
-	SystemManageServiceImpl sysm = new SystemManageServiceImpl();
+	private final SystemManageServiceImpl sysm = new SystemManageServiceImpl();
 
 	@Before
 	public void setup() {
@@ -105,6 +105,11 @@ public class AuthenticationServiceTest {
 			this.trans = trans;
 		}
 
+		/**
+		 * Override this
+		 * 
+		 * @return
+		 */
 		abstract boolean go();
 
 		final boolean run() {
