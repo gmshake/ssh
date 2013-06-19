@@ -21,6 +21,9 @@ import tk.blizz.ssh.dao.impl.GenericHibernateDAO;
  */
 public class TestGenericHibernateDAO {
 	class TestDAOImpl extends GenericHibernateDAO<Event, Long> {
+		public TestDAOImpl() {
+			super(Event.class);
+		}
 	}
 
 	org.hsqldb.server.Server server;

@@ -2,7 +2,6 @@ package tk.blizz.ssh.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -27,44 +26,53 @@ import tk.blizz.ssh.dao.GenericDAO;
  */
 public abstract class GenericHibernateDAO<T, PK extends Serializable>
 		implements GenericDAO<T, PK> {
-	private static final long serialVersionUID = 2013052702L;
 
-	private final Class<T> entityClass;
+	// private final Class<? extends T> entityClass;
+
+	private final String entityName;
 
 	private transient SessionFactory sessionFactory;
 
-	@SuppressWarnings("unchecked")
-	public GenericHibernateDAO() {
-		this.entityClass = (Class<T>) ((ParameterizedType) getClass()
-				.getGenericSuperclass()).getActualTypeArguments()[0];
+	// @SuppressWarnings("unchecked")
+	// public GenericHibernateDAO() {
+	// this.entityClass = (Class<? extends T>) ((ParameterizedType) getClass()
+	// .getGenericSuperclass()).getActualTypeArguments()[0];
+	// }
+
+	/**
+	 * Constructor used for subclasses/implementors
+	 * 
+	 * @param entityClass
+	 *            The class, which is an entity, or has entity
+	 *            subclasses/implementors
+	 * @throws NullPointerException
+	 *             if entityClass is null
+	 */
+	public GenericHibernateDAO(Class<? extends T> entityClass) {
+		// this.entityClass = entityClass;
+		this.entityName = entityClass.getName();
 	}
 
 	/**
-	 * find element by primary key
-	 * 
-	 * @see GenericDAO#findById(Serializable)
+	 * {@inheritDoc}
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public T findById(PK id) {
-		return (T) getSession().load(this.entityClass, id);
+		return (T) getSession().load(this.entityName, id);
 	}
 
 	/**
-	 * persistent element
-	 * 
-	 * @see GenericDAO#save(Object)
+	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public PK save(T entity) {
 		return (PK) getSession().save(entity);
 	}
 
 	/**
-	 * update persistent entity
-	 * 
-	 * @see GenericDAO#update(Object)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void update(T persistentEntity) {
@@ -72,7 +80,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * @see GenericDAO#saveOrUpdate(Object)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void saveOrUpdate(T entity) {
@@ -80,18 +88,16 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * @see GenericDAO#merge(Object)
+	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public T merge(T detachedEntity) {
 		return (T) getSession().merge(detachedEntity);
 	}
 
 	/**
-	 * delete persistent entity
-	 * 
-	 * @see GenericDAO#delete(Object)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void delete(T persistentEntity) {
@@ -99,9 +105,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * find all elements
-	 * 
-	 * @see GenericDAO#findAll()
+	 * {@inheritDoc}
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -110,14 +114,17 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * find any elements by given example instance
-	 * 
-	 * @see GenericDAO#findByExample(Object)
+	 * {@inheritDoc}
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<T> findByExample(T example) {
 		return createCriteria().add(Example.create(example)).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public T findUniqueByExample(T example) {
+		return (T) createCriteria().add(Example.create(example)).uniqueResult();
 	}
 
 	/**
@@ -129,10 +136,10 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@SuppressWarnings("unchecked")
 	protected T findByNaturalId(T entity) {
-		NaturalIdLoadAccess access = getSession().byNaturalId(this.entityClass);
+		NaturalIdLoadAccess access = getSession().byNaturalId(this.entityName);
 
 		ClassMetadata meta = this.sessionFactory
-				.getClassMetadata(this.entityClass);
+				.getClassMetadata(this.entityName);
 		int[] idxs = meta.getNaturalIdentifierProperties();
 
 		if (idxs != null && idxs.length > 0) {
@@ -159,16 +166,26 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * get new Criteria
+	 * Create {@link Criteria} instance for default entityName
 	 * 
 	 * @return
 	 */
 	protected Criteria createCriteria() {
-		return getSession().createCriteria(this.entityClass);
+		return getSession().createCriteria(this.entityName);
 	}
 
 	/**
-	 * get new Query from given hql
+	 * Create {@link Criteria} instance for the given entity name.
+	 * 
+	 * @param entityName
+	 * @return
+	 */
+	protected Criteria createCriteria(String entityName) {
+		return getSession().createCriteria(entityName);
+	}
+
+	/**
+	 * Create a {@link Query} instance for the given HQL query string.
 	 * 
 	 * @param hql
 	 *            a HQL string
@@ -179,11 +196,11 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
-	 * get new Query from given sql
+	 * Create a {@link SQLQuery} instance for the given SQL query string.
 	 * 
 	 * @param sql
 	 *            a Native SQL string
-	 * @return
+	 * @return The query instance for manipulation and execution
 	 */
 	protected SQLQuery createSQLQuery(String sql) {
 		return getSession().createSQLQuery(sql);
@@ -192,9 +209,15 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	/**
 	 * get current session
 	 * 
-	 * @return
+	 * @return The current session.
+	 * @throws IllegalStateException
+	 *             When sessionFactory is not set
+	 * @throws HibernateException
+	 *             Indicates an issue locating a suitable current session.
 	 */
 	protected Session getSession() {
+		if (this.sessionFactory == null)
+			throw new IllegalStateException("no SessionFactory found");
 		return this.sessionFactory.getCurrentSession();
 	}
 
