@@ -8,6 +8,10 @@ import tk.blizz.ssh.model.Role;
 public class RoleDAOImpl extends GenericHibernateDAO<Role, Long> implements
 		RoleDAO {
 
+	public RoleDAOImpl() {
+		super(Role.class);
+	}
+
 	@Override
 	public List<Role> findByRoleName(String name) {
 		Role example = new Role().setName(name);
