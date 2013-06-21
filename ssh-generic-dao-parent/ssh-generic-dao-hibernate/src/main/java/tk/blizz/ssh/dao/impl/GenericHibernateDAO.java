@@ -1,7 +1,9 @@
 package tk.blizz.ssh.dao.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -16,6 +18,7 @@ import org.hibernate.criterion.Example;
 import org.hibernate.metadata.ClassMetadata;
 
 import tk.blizz.ssh.dao.GenericDAO;
+import tk.blizz.ssh.dao.GenericDaoException;
 
 /**
  * @author zlei.huang@gmail.com 2013-05-25
@@ -27,8 +30,8 @@ import tk.blizz.ssh.dao.GenericDAO;
 public abstract class GenericHibernateDAO<T, PK extends Serializable>
 		implements GenericDAO<T, PK> {
 
-	// private final Class<? extends T> entityClass;
-
+	private final Class<T> declaredClass;
+	private final Class<? extends T> entityClass;
 	private final String entityName;
 
 	private transient SessionFactory sessionFactory;
@@ -48,8 +51,11 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 * @throws NullPointerException
 	 *             if entityClass is null
 	 */
+	@SuppressWarnings("unchecked")
 	public GenericHibernateDAO(Class<? extends T> entityClass) {
-		// this.entityClass = entityClass;
+		this.declaredClass = (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+		this.entityClass = entityClass;
 		this.entityName = entityClass.getName();
 	}
 
@@ -63,12 +69,48 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	}
 
 	/**
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws GenericDaoException
+	 */
+	private T createInstance(T entity) {
+		Constructor<? extends T> constructor;
+		try {
+			constructor = this.entityClass.getConstructor(this.declaredClass);
+			return constructor.newInstance(entity);
+		} catch (SecurityException e) {
+			throw new GenericDaoException(e);
+		} catch (NoSuchMethodException e) {
+			throw new GenericDaoException(e);
+		} catch (IllegalArgumentException e) {
+			throw new GenericDaoException(e);
+		} catch (InstantiationException e) {
+			throw new GenericDaoException(e);
+		} catch (IllegalAccessException e) {
+			throw new GenericDaoException(e);
+		} catch (InvocationTargetException e) {
+			throw new GenericDaoException(e);
+		}
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public PK save(T entity) {
-		return (PK) getSession().save(entity);
+		if (!this.entityClass.isAssignableFrom(entity.getClass())) {
+			entity = createInstance(entity);
+		}
+		return (PK) getSession().save(this.entityName, entity);
+	}
+
+	public void persist(T entity) {
+		if (!this.entityClass.isAssignableFrom(entity.getClass())) {
+			entity = createInstance(entity);
+		}
+		getSession().persist(this.entityName, entity);
 	}
 
 	/**
@@ -76,7 +118,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	public void update(T persistentEntity) {
-		getSession().update(persistentEntity);
+		getSession().update(this.entityName, persistentEntity);
 	}
 
 	/**
@@ -84,7 +126,10 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	public void saveOrUpdate(T entity) {
-		getSession().saveOrUpdate(entity);
+		if (!this.entityClass.isAssignableFrom(entity.getClass())) {
+			entity = createInstance(entity);
+		}
+		getSession().saveOrUpdate(this.entityName, entity);
 	}
 
 	/**
@@ -93,7 +138,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	@Override
 	@SuppressWarnings("unchecked")
 	public T merge(T detachedEntity) {
-		return (T) getSession().merge(detachedEntity);
+		return (T) getSession().merge(this.entityName, detachedEntity);
 	}
 
 	/**
@@ -101,7 +146,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	public void delete(T persistentEntity) {
-		getSession().delete(persistentEntity);
+		getSession().delete(this.entityName, persistentEntity);
 	}
 
 	/**

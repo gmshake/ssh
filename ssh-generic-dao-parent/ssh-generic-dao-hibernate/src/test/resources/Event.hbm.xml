@@ -8,7 +8,7 @@
 		<id name="id" type="long" column="ID">
 			<generator class="native" />
 		</id>
-		<property name="name" type="string">
+		<property name="name" type="string" >
 			<column name="NAME" />
 		</property>
 		<property name="createTime" type="date">
