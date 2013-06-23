@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +19,7 @@ import tk.blizz.ssh.dao.impl.GenericHibernateDAO;
  * 
  */
 public class TestGenericHibernateDAO {
-	class TestDAOImpl extends GenericHibernateDAO<User, Long> {
-		public TestDAOImpl() {
-			super(UserImpl.class);
-		}
+	class TestDAOImpl extends GenericHibernateDAO<User, UserImpl, Long> {
 	}
 
 	private final org.hsqldb.server.Server server = new org.hsqldb.server.Server();
@@ -33,8 +31,14 @@ public class TestGenericHibernateDAO {
 		this.server.setDatabasePath(0, "mem:memdb");
 		this.server.start();
 
-		final SessionFactory sessionFactory = new Configuration().configure()
-				.addAnnotatedClass(UserImpl.class).buildSessionFactory();
+		final Configuration configuration = new Configuration()
+				.addAnnotatedClass(UserImpl.class).configure();
+		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
+				.applySettings(configuration.getProperties());
+
+		final SessionFactory sessionFactory = configuration
+				.buildSessionFactory(serviceRegistryBuilder
+						.buildServiceRegistry());
 
 		this.dao.setSessionFactory(sessionFactory);
 	}
