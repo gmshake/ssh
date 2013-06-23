@@ -7,6 +7,7 @@ import java.util.Date;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class TestUserDAO {
 
 	org.hsqldb.server.Server server;
 	private SessionFactory sessionFactory;
-	private UserDAOImpl userDao;
+	private final UserDAOImpl userDao = new UserDAOImpl();
 
 	private Transaction trans;
 
@@ -37,10 +38,14 @@ public class TestUserDAO {
 		this.server.setDatabasePath(0, "mem:memdb");
 		this.server.start();
 
-		this.sessionFactory = new Configuration().configure()
-				.buildSessionFactory();
+		final Configuration configuration = new Configuration().configure();
+		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
+				.applySettings(configuration.getProperties());
 
-		this.userDao = new UserDAOImpl();
+		this.sessionFactory = configuration
+				.buildSessionFactory(serviceRegistryBuilder
+						.buildServiceRegistry());
+
 		this.userDao.setSessionFactory(this.sessionFactory);
 
 		this.trans = this.sessionFactory.getCurrentSession().beginTransaction();
@@ -56,6 +61,7 @@ public class TestUserDAO {
 		this.sessionFactory.close();
 
 		this.server.shutdown();
+
 	}
 
 	@Test
@@ -75,5 +81,4 @@ public class TestUserDAO {
 			throw e;
 		}
 	}
-
 }

@@ -4,10 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
+import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +26,9 @@ import tk.blizz.ssh.model.impl.FunctionImpl;
  */
 public class TestFunctionDao {
 
-	org.hsqldb.server.Server server;
+	private final org.hsqldb.server.Server server = new org.hsqldb.server.Server();
 	private SessionFactory sessionFactory;
-	private FunctionDaoImpl dao;
+	private final FunctionDaoImpl dao = new FunctionDaoImpl();
 
 	private Transaction trans;
 
@@ -34,15 +36,19 @@ public class TestFunctionDao {
 
 	@Before
 	public void setup() {
-		this.server = new org.hsqldb.server.Server();
 		this.server.setDatabaseName(0, "memdb");
 		this.server.setDatabasePath(0, "mem:memdb");
 		this.server.start();
 
-		this.sessionFactory = new Configuration().configure()
-				.addAnnotatedClass(FunctionImpl.class).buildSessionFactory();
+		final Configuration configuration = new Configuration()
+				.addAnnotatedClass(FunctionImpl.class).configure();
+		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
+				.applySettings(configuration.getProperties());
 
-		this.dao = new FunctionDaoImpl();
+		this.sessionFactory = configuration
+				.buildSessionFactory(serviceRegistryBuilder
+						.buildServiceRegistry());
+
 		this.dao.setSessionFactory(this.sessionFactory);
 
 		this.trans = this.sessionFactory.getCurrentSession().beginTransaction();
@@ -66,7 +72,10 @@ public class TestFunctionDao {
 			Function u = new FunctionImpl();
 			u.setName("Hello");
 			u.setUrl(new URL("http://www.blizz.tk/"));
+
+			Function n = new FunctionImpl(u).setName("World");
 			Long id = this.dao.save(u);
+			this.dao.save(n);
 
 			assertEquals(id, u.getId());
 
@@ -80,6 +89,13 @@ public class TestFunctionDao {
 
 			assertTrue(u.getName().equals(f.getName()));
 			assertTrue(u.getUrl().equals(f.getUrl()));
+
+			List<FunctionImpl> fs = this.dao.findAll();
+			System.out.println("-----------------------------------");
+			for (Function i : fs) {
+				System.out.println(i);
+			}
+			System.out.println("-----------------------------------");
 
 		} catch (Exception e) {
 			this.hasError = true;

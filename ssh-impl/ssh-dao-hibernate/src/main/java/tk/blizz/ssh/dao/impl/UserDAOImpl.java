@@ -5,12 +5,8 @@ import java.util.List;
 import tk.blizz.ssh.dao.UserDAO;
 import tk.blizz.ssh.model.User;
 
-public class UserDAOImpl extends GenericHibernateDAO<User, Long> implements
-		UserDAO {
-
-	public UserDAOImpl() {
-		super(User.class);
-	}
+public class UserDAOImpl extends GenericHibernateDAO<User, User, Long>
+		implements UserDAO {
 
 	@Override
 	public List<User> findByUserName(String name) {
