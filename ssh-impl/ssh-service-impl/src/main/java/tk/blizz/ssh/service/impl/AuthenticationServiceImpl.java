@@ -39,14 +39,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public boolean isValidUserInfo(String name, String pwd) {
 		User user = new User().setName(name).setPassword(pwd);
-		List<User> l = this.userDao.findByExample(user);
+		List<? extends User> l = this.userDao.findByExample(user);
 		return l.size() > 0;
 	}
 
 	@Override
 	public boolean isValidUserInfo(String name, String hashPwd, String salt) {
 		User user = new User().setName(name);
-		List<User> l = this.userDao.findByExample(user);
+		List<? extends User> l = this.userDao.findByExample(user);
 		for (User u : l) {
 			if (HexToString.hashUserNamePwdSalt(u.getName(), u.getPassword(),
 					salt).equalsIgnoreCase(hashPwd))

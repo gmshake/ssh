@@ -9,6 +9,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +42,13 @@ public class AuthenticationServiceTest {
 		this.server.setDatabasePath(0, "mem:memdb");
 		this.server.start();
 
-		this.sessionFactory = new Configuration().configure()
-				.buildSessionFactory();
+		final Configuration configuration = new Configuration().configure();
+		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
+				.applySettings(configuration.getProperties());
+
+		this.sessionFactory = configuration
+				.buildSessionFactory(serviceRegistryBuilder
+						.buildServiceRegistry());
 
 		UserDAOImpl userDao = new UserDAOImpl();
 		RoleDAOImpl roleDao = new RoleDAOImpl();
