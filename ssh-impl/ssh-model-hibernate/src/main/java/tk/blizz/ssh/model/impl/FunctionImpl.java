@@ -21,6 +21,16 @@ public class FunctionImpl implements Function {
 	private String name;
 	private URL url;
 
+	public FunctionImpl() {
+
+	}
+
+	public FunctionImpl(Function f) {
+		this.id = f.getId();
+		this.name = f.getName();
+		this.url = f.getUrl();
+	}
+
 	@Override
 	@Id
 	@Column(updatable = false)
