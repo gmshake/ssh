@@ -11,7 +11,7 @@ import tk.blizz.ssh.dao.impl.GenericHibernateDAO;
  * @author zlei.huang@gmail.com (2013-06-20)
  * 
  */
-public abstract class DaoWrapper<T extends GenericHibernateDAO<?, ?>> {
+public abstract class DaoWrapper<T extends GenericHibernateDAO<?, ?, ?>> {
 	protected final T dao;
 
 	public DaoWrapper(T dao) {

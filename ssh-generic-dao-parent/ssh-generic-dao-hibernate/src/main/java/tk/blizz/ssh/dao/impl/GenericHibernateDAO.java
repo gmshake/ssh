@@ -27,20 +27,27 @@ import tk.blizz.ssh.dao.GenericDaoException;
  * @param <PK>
  *            Entity primary key
  */
-public abstract class GenericHibernateDAO<T, PK extends Serializable>
+public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializable>
 		implements GenericDAO<T, PK> {
 
 	private final Class<T> declaredClass;
-	private final Class<? extends T> entityClass;
+	private final Class<E> entityClass;
+	private final Class<PK> pkClass;
+
 	private final String entityName;
 
 	private transient SessionFactory sessionFactory;
 
-	// @SuppressWarnings("unchecked")
-	// public GenericHibernateDAO() {
-	// this.entityClass = (Class<? extends T>) ((ParameterizedType) getClass()
-	// .getGenericSuperclass()).getActualTypeArguments()[0];
-	// }
+	@SuppressWarnings("unchecked")
+	public GenericHibernateDAO() {
+		this.declaredClass = (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+		this.entityClass = (Class<E>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[1];
+		this.pkClass = (Class<PK>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[2];
+		this.entityName = this.entityClass.getName();
+	}
 
 	/**
 	 * Constructor used for subclasses/implementors
@@ -51,21 +58,21 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 * @throws NullPointerException
 	 *             if entityClass is null
 	 */
-	@SuppressWarnings("unchecked")
-	public GenericHibernateDAO(Class<? extends T> entityClass) {
-		this.declaredClass = (Class<T>) ((ParameterizedType) getClass()
-				.getGenericSuperclass()).getActualTypeArguments()[0];
-		this.entityClass = entityClass;
-		this.entityName = entityClass.getName();
-	}
+	// @SuppressWarnings("unchecked")
+	// public GenericHibernateDAO(Class<? extends T> entityClass) {
+	// this.declaredClass = (Class<T>) ((ParameterizedType) getClass()
+	// .getGenericSuperclass()).getActualTypeArguments()[0];
+	// this.entityClass = entityClass;
+	// this.entityName = entityClass.getName();
+	// }
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
-	public T findById(PK id) {
-		return (T) getSession().load(this.entityName, id);
+	@Override
+	public E findById(PK id) {
+		return (E) getSession().load(this.entityName, id);
 	}
 
 	/**
@@ -74,10 +81,10 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 * @return
 	 * @throws GenericDaoException
 	 */
-	private T createInstance(T entity) {
-		Constructor<? extends T> constructor;
+	private E createInstance(T entity) {
 		try {
-			constructor = this.entityClass.getConstructor(this.declaredClass);
+			Constructor<E> constructor = this.entityClass
+					.getConstructor(this.declaredClass);
 			return constructor.newInstance(entity);
 		} catch (SecurityException e) {
 			throw new GenericDaoException(e);
@@ -98,12 +105,11 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 * {@inheritDoc}
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public PK save(T entity) {
 		if (!this.entityClass.isAssignableFrom(entity.getClass())) {
 			entity = createInstance(entity);
 		}
-		return (PK) getSession().save(this.entityName, entity);
+		return pkClass.cast(getSession().save(this.entityName, entity));
 	}
 
 	public void persist(T entity) {
@@ -118,7 +124,8 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	public void update(T persistentEntity) {
-		getSession().update(this.entityName, persistentEntity);
+		E p = this.entityClass.cast(persistentEntity);
+		getSession().update(this.entityName, p);
 	}
 
 	/**
@@ -135,10 +142,11 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
-	public T merge(T detachedEntity) {
-		return (T) getSession().merge(this.entityName, detachedEntity);
+	@Override
+	public E merge(T detachedEntity) {
+		E p = this.entityClass.cast(detachedEntity);
+		return (E) getSession().merge(this.entityName, p);
 	}
 
 	/**
@@ -146,15 +154,17 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	public void delete(T persistentEntity) {
-		getSession().delete(this.entityName, persistentEntity);
+		// check entity class
+		E p = this.entityClass.cast(persistentEntity);
+		getSession().delete(this.entityName, p);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> findAll() {
+	@Override
+	public List<E> findAll() {
 		return createCriteria().list();
 	}
 
@@ -163,13 +173,13 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<T> findByExample(T example) {
+	public List<E> findByExample(T example) {
 		return createCriteria().add(Example.create(example)).list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public T findUniqueByExample(T example) {
-		return (T) createCriteria().add(Example.create(example)).uniqueResult();
+	public E findUniqueByExample(T example) {
+		return (E) createCriteria().add(Example.create(example)).uniqueResult();
 	}
 
 	/**
@@ -180,7 +190,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected T findByNaturalId(T entity) {
+	protected E findByNaturalId(T entity) {
 		NaturalIdLoadAccess access = getSession().byNaturalId(this.entityName);
 
 		ClassMetadata meta = this.sessionFactory
@@ -205,7 +215,7 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable>
 				throw new HibernateException(e);
 			}
 
-			return (T) access.load();
+			return (E) access.load();
 		}
 		return null;
 	}

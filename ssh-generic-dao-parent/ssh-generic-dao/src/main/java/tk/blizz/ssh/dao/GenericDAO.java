@@ -63,7 +63,7 @@ public interface GenericDAO<T, PK extends Serializable> {
 	 * 
 	 * @return
 	 */
-	List<T> findAll();
+	List<? extends T> findAll();
 
 	/**
 	 * find any entity by given entity example
@@ -71,5 +71,6 @@ public interface GenericDAO<T, PK extends Serializable> {
 	 * @param example
 	 * @return
 	 */
-	List<T> findByExample(T example);
+	List<? extends T> findByExample(T example);
+
 }
