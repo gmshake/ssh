@@ -6,11 +6,11 @@
   <name>ssh example</name>
   <packaging>pom</packaging>
   <modules>
-  	<module>ssh-api</module>
-  	<module>ssh-web</module>
   	<module>ssh-utils</module>
-  	<module>ssh-impl</module>
   	<module>ssh-generic-dao-parent</module>
+  	<module>ssh-api</module>
+  	<module>ssh-impl</module>
+  	<module>ssh-web</module>
   </modules>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
