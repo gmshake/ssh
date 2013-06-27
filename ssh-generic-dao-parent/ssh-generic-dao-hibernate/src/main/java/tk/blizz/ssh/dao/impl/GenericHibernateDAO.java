@@ -23,7 +23,10 @@ import tk.blizz.ssh.dao.GenericDaoException;
 /**
  * @author zlei.huang@gmail.com 2013-05-25
  * @param <T>
- *            Entity class
+ *            Declared Type
+ * @param <E>
+ *            Entity Real Type
+ * 
  * @param <PK>
  *            Entity primary key
  */
@@ -109,7 +112,7 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 		if (!this.entityClass.isAssignableFrom(entity.getClass())) {
 			entity = createInstance(entity);
 		}
-		return pkClass.cast(getSession().save(this.entityName, entity));
+		return this.pkClass.cast(getSession().save(this.entityName, entity));
 	}
 
 	public void persist(T entity) {
@@ -165,7 +168,7 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> findAll() {
-		return createCriteria().list();
+		return createCriteria().setCacheable(true).list();
 	}
 
 	/**
@@ -179,7 +182,8 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 
 	@SuppressWarnings("unchecked")
 	public E findUniqueByExample(T example) {
-		return (E) createCriteria().add(Example.create(example)).uniqueResult();
+		return (E) createCriteria().add(Example.create(example))
+				.setCacheable(true).uniqueResult();
 	}
 
 	/**

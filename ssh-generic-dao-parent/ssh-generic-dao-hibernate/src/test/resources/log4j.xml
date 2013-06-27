@@ -12,6 +12,11 @@
 		<appender-ref ref="CONSOLE" />
 	</logger>
 
+	<logger name="net.sf.ehcache" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
 	<logger name="tk.blizz.ssh.dao.hibernate" additivity="false">
 		<level value="debug" />
 		<appender-ref ref="CONSOLE" />

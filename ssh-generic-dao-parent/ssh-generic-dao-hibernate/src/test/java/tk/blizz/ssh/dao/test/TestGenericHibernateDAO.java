@@ -3,7 +3,11 @@ package tk.blizz.ssh.dao.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cache.ehcache.EhCacheRegionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
@@ -19,11 +23,21 @@ import tk.blizz.ssh.dao.impl.GenericHibernateDAO;
  * 
  */
 public class TestGenericHibernateDAO {
-	class TestDAOImpl extends GenericHibernateDAO<User, UserImpl, Long> {
+	public class TestDAOImpl extends GenericHibernateDAO<User, UserImpl, Long> {
+		UserImpl findByName(String name) {
+			return super.findUniqueByExample(new UserImpl().setName(name));
+		}
+
+		@Override
+		public Session getSession() {
+			return super.getSession();
+		}
 	}
 
 	private final org.hsqldb.server.Server server = new org.hsqldb.server.Server();
 	private final TestDAOImpl dao = new TestDAOImpl();
+
+	EhCacheRegionFactory u;
 
 	@Before
 	public void setup() {
@@ -149,7 +163,7 @@ public class TestGenericHibernateDAO {
 
 				f.setName("test");
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
 				}
 				this.dao.update(f);
@@ -211,9 +225,29 @@ public class TestGenericHibernateDAO {
 				this.dao.persist(u);
 
 				System.out.println(u);
+
+				User uu = this.dao.findByName("test");
+				System.out.println(uu);
+
+				User uu2 = this.dao.findById(uu.getId());
+				System.out.println(uu2);
+
 				return true;
 			}
 		}.run());
-	}
 
+		new DaoWrapper<GenericHibernateDAO<?, ?, ?>>(this.dao) {
+
+			@Override
+			protected boolean go() {
+				TestDAOImpl dao = (TestDAOImpl) this.dao;
+
+				List<UserImpl> us = dao.findAll();
+				for (UserImpl u : us) {
+					System.out.println(u);
+				}
+				return true;
+			}
+		}.run();
+	}
 }

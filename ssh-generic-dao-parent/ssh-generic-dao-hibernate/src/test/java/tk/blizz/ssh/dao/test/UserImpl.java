@@ -2,6 +2,7 @@ package tk.blizz.ssh.dao.test;
 
 import java.util.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,13 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity
 @Table(name = "USER")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserImpl implements User {
 	private Long id;
 	private String name;

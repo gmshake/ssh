@@ -5,6 +5,7 @@
 
 <hibernate-mapping package="tk.blizz.ssh.dao.test">
 	<class name="Event" table="EVENT">
+		<cache usage="read-write" include="all" />
 		<id name="id" type="long" column="ID">
 			<generator class="native" />
 		</id>

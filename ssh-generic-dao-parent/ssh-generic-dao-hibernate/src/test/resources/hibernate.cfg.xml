@@ -21,6 +21,12 @@
 
 		<!-- Disable the second-level cache 
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>-->
+		
+		<property name="hibernate.cache.user_second_level_cache">true</property>
+		
+		<property name="hibernate.cache.use_query_cache">true</property>
+
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
 
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
