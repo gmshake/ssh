@@ -10,6 +10,7 @@
 	<package name="default" namespace="/" extends="struts-default">
 		<action name="hello" class="tk.blizz.ssh.action.HelloAction">
 			<result name="success">index.jsp</result>
+			<result name="error">bad.jsp</result>
 		</action>
 	</package>
 
@@ -17,6 +18,7 @@
 		<action name="jsonHello" class="tk.blizz.ssh.action.HelloAction"
 			method="jsonHello">
 			<result name="success" type="json" />
+			<result name="error" type="json" />
 		</action>
 	</package>
 
