@@ -14,20 +14,39 @@
   	</dependency>
   	<dependency>
   		<groupId>tk.blizz.ssh</groupId>
+  		<artifactId>ssh-model-hibernate</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>tk.blizz.ssh</groupId>
   		<artifactId>ssh-generic-dao-hibernate</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   		<exclusions>
   			<exclusion>
   				<groupId>org.hibernate</groupId>
-  				<artifactId>hibernate-core</artifactId>
+  				<artifactId>*</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>org.hibernate.common</groupId>
+  				<artifactId>*</artifactId>
   			</exclusion>
   		</exclusions>
   	</dependency>
   	<dependency>
-  		<groupId>tk.blizz.ssh</groupId>
-  		<artifactId>ssh-model-hibernate</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  		<scope>test</scope>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-core</artifactId>
+  		<version>${hibernate.version}</version>
+  		<exclusions>
+  			<exclusion>
+  				<groupId>org.jboss.logging</groupId>
+  				<artifactId>jboss-logging</artifactId>
+  			</exclusion>
+  		</exclusions>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.jboss.logging</groupId>
+  		<artifactId>jboss-logging</artifactId>
+  		<version>${jboss.logging.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
