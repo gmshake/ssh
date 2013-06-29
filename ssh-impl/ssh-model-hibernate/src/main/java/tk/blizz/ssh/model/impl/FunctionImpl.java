@@ -22,7 +22,6 @@ public class FunctionImpl implements Function {
 	private URL url;
 
 	public FunctionImpl() {
-
 	}
 
 	public FunctionImpl(Function f) {
