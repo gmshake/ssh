@@ -27,7 +27,7 @@ public class ReportAction extends ActionSupport {
 
 	private static final String FILEPATTERN = "^[a-zA-Z][a-zA-Z0-9_]*$";
 
-	private Pattern filePattern = Pattern.compile(FILEPATTERN);
+	private final Pattern filePattern = Pattern.compile(FILEPATTERN);
 
 	protected File getReportDir() {
 		ServletContext context = ServletActionContext.getServletContext();
@@ -79,11 +79,11 @@ public class ReportAction extends ActionSupport {
 	@Override
 	public void validate() {
 		if (this.reportName == null || this.reportName.isEmpty()) {
-			throw new IllegalArgumentException("need fileName parameter");
+			throw new IllegalArgumentException("need reportName parameter");
 		}
 
 		if (!this.filePattern.matcher(this.reportName).matches()) {
-			throw new IllegalArgumentException("invalid fileName parameter");
+			throw new IllegalArgumentException("invalid reportName parameter");
 		}
 
 	}

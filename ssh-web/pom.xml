@@ -69,6 +69,7 @@
   	</dependency>
   </dependencies>
   <build>
+  	<finalName>${artifactId}-${version}.war</finalName>
   	<plugins>
   		<plugin>
   			<groupId>org.mortbay.jetty</groupId>
