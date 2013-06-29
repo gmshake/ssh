@@ -3,7 +3,7 @@
   <groupId>tk.blizz.ssh</groupId>
   <artifactId>ssh-parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>ssh example</name>
+  <name>ssh-parent</name>
   <packaging>pom</packaging>
   <modules>
   	<module>ssh-utils</module>

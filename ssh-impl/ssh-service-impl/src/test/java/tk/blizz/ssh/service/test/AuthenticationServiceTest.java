@@ -94,6 +94,7 @@ public class AuthenticationServiceTest {
 				.getCurrentSession().getTransaction()) {
 			@Override
 			boolean go() {
+				@SuppressWarnings("unchecked")
 				List<User> users = AuthenticationServiceTest.this.auth
 						.getUserByName("huang");
 				for (User u : users)
