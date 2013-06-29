@@ -2,6 +2,9 @@ package tk.blizz.ssh.service.impl;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import tk.blizz.ssh.dao.RoleDAO;
 import tk.blizz.ssh.dao.UserDAO;
 import tk.blizz.ssh.model.Role;
@@ -10,6 +13,7 @@ import tk.blizz.ssh.service.AuthenticationService;
 import tk.blizz.ssh.service.ServiceCallBack;
 import tk.blizz.utils.HexToString;
 
+@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class AuthenticationServiceImpl implements AuthenticationService {
 	private UserDAO userDao;
 	private RoleDAO roleDao;
