@@ -19,51 +19,50 @@ import tk.blizz.ssh.model.Function;
 import tk.blizz.ssh.model.impl.FunctionImpl;
 
 /**
- * Tests for {@link tk.blizz.ssh.dao.impl.UserDAOImpl}.
+ * Tests for {@link tk.blizz.ssh.dao.impl.FunctionDaoImpl}.
  * 
  * @author zlei.huang@gmail.com (Huang Zhenlei)
  * 
  */
-public class TestFunctionDao {
+public class TestFunctionDao extends TestBase {
 
-	private final org.hsqldb.server.Server server = new org.hsqldb.server.Server();
-	private SessionFactory sessionFactory;
 	private final FunctionDaoImpl dao = new FunctionDaoImpl();
 
 	private Transaction trans;
 
 	private boolean hasError;
 
+	@Override
 	@Before
 	public void setup() {
-		this.server.setDatabaseName(0, "memdb");
-		this.server.setDatabasePath(0, "mem:memdb");
-		this.server.start();
+		super.setup();
 
-		final Configuration configuration = new Configuration()
-				.addAnnotatedClass(FunctionImpl.class).configure();
+		final Configuration configuration = new Configuration().configure()
+				.addAnnotatedClass(FunctionImpl.class);
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
 
-		this.sessionFactory = configuration
+		final SessionFactory sf = configuration
 				.buildSessionFactory(serviceRegistryBuilder
 						.buildServiceRegistry());
 
-		this.dao.setSessionFactory(this.sessionFactory);
+		this.dao.setSessionFactory(sf);
 
-		this.trans = this.sessionFactory.getCurrentSession().beginTransaction();
+		this.trans = sf.getCurrentSession().beginTransaction();
 	}
 
+	@Override
 	@After
 	public void teardown() {
 		if (this.hasError)
 			this.trans.rollback();
 		else
 			this.trans.commit();
-		this.dao.setSessionFactory(null);
-		this.sessionFactory.close();
 
-		this.server.shutdown();
+		final SessionFactory sf = this.dao.getSessionFactory();
+		sf.close();
+
+		super.teardown();
 	}
 
 	@Test

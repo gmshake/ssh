@@ -21,47 +21,45 @@ import tk.blizz.ssh.model.User;
  * @author zlei.huang@gmail.com (Huang Zhenlei)
  * 
  */
-public class TestUserDAO {
+public class TestUserDAO extends TestBase {
 
-	org.hsqldb.server.Server server;
-	private SessionFactory sessionFactory;
 	private final UserDAOImpl userDao = new UserDAOImpl();
 
 	private Transaction trans;
 
 	private boolean hasError;
 
+	@Override
 	@Before
 	public void setup() {
-		this.server = new org.hsqldb.server.Server();
-		this.server.setDatabaseName(0, "memdb");
-		this.server.setDatabasePath(0, "mem:memdb");
-		this.server.start();
+		super.setup();
 
 		final Configuration configuration = new Configuration().configure();
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
 
-		this.sessionFactory = configuration
+		final SessionFactory sf = configuration
 				.buildSessionFactory(serviceRegistryBuilder
 						.buildServiceRegistry());
 
-		this.userDao.setSessionFactory(this.sessionFactory);
+		this.userDao.setSessionFactory(sf);
 
-		this.trans = this.sessionFactory.getCurrentSession().beginTransaction();
+		this.trans = sf.getCurrentSession().beginTransaction();
 	}
 
+	@Override
 	@After
 	public void teardown() {
 		if (this.hasError)
 			this.trans.rollback();
 		else
 			this.trans.commit();
+
+		final SessionFactory sf = this.userDao.getSessionFactory();
 		this.userDao.setSessionFactory(null);
-		this.sessionFactory.close();
+		sf.close();
 
-		this.server.shutdown();
-
+		super.teardown();
 	}
 
 	@Test
