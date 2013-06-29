@@ -19,14 +19,13 @@
   	</dependency>
   	<dependency>
   		<groupId>tk.blizz.ssh</groupId>
-  		<artifactId>ssh-dao-hibernate</artifactId>
+  		<artifactId>ssh-utils</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
-  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.8.2</version>
+  		<version>${junit.version}</version>
   		<scope>test</scope>
   	</dependency>
   	<dependency>
@@ -43,8 +42,15 @@
   	</dependency>
   	<dependency>
   		<groupId>tk.blizz.ssh</groupId>
-  		<artifactId>ssh-utils</artifactId>
+  		<artifactId>ssh-dao-hibernate</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-core</artifactId>
+  		<version>${hibernate.version}</version>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>
