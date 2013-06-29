@@ -22,6 +22,13 @@ public class HelloAction extends ActionSupport {
 	private HelloWorld helloWorld;
 
 	@Override
+	public void validate() {
+		if (this.username == null || this.password == null) {
+			throw new NullPointerException("username or password required!!!");
+		}
+	}
+
+	@Override
 	public String execute() {
 		WebApplicationContext ctx = WebApplicationContextUtils
 				.getRequiredWebApplicationContext(ServletActionContext
@@ -50,6 +57,7 @@ public class HelloAction extends ActionSupport {
 		HelloWorld h = new HelloWorld();
 		h.hello = this.username;
 		h.world = new String[] { "wrong password", this.password };
+		this.helloWorld = h;
 		return ERROR;
 	}
 
