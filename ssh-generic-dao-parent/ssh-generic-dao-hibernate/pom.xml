@@ -6,6 +6,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>ssh-generic-dao-hibernate</artifactId>
+  <properties>
+  	<hibernate.version>4.1.12.Final</hibernate.version>
+  </properties>
   <dependencies>
   	<dependency>
   		<groupId>tk.blizz.ssh</groupId>
@@ -27,7 +30,7 @@
   	<dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-core</artifactId>
-  		<version>4.1.12.Final</version>
+  		<version>${hibernate.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.slf4j</groupId>
@@ -43,7 +46,7 @@
   	<dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-ehcache</artifactId>
-  		<version>4.1.12.Final</version>
+  		<version>${hibernate.version}</version>
   		<scope>test</scope>
   		<exclusions>
   			<exclusion>
