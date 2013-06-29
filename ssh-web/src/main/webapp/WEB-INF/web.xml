@@ -5,6 +5,17 @@
 
 	<display-name>Servlet 3.0 Web Application</display-name>
 	
+	<context-param>
+		<description>Spring Context Parameters</description>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/classes/*Context.xml</param-value>
+	</context-param>
+	
+	<listener>
+		<description>Spring Web Context Loader Listener</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
