@@ -1,5 +1,6 @@
 package tk.blizz.ssh.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Propagation;
@@ -22,12 +23,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	public List<User> getUserByName(String name,
 			ServiceCallBack<List<? extends User>>... callbacks) {
 
-		List<User> userList = this.userDao.findByUserName(name);
+		User user = this.userDao.findByUserName(name);
+
+		List<User> list = new ArrayList<User>(1);
+		list.add(user);
 
 		for (ServiceCallBack<List<? extends User>> callback : callbacks) {
-			callback.call(userList);
+			callback.call(list);
 		}
-		return userList;
+		return list;
 	}
 
 	@Override
@@ -57,6 +61,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public boolean register(String name, String pwd) {
+		User user = this.userDao.findByUserName(name);
+		if (user != null)
+			return false;
+
+		user = new User().setName(name).setPassword(pwd);
+		this.userDao.save(user);
+		return true;
 	}
 
 	// setters, injected by spring

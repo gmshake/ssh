@@ -16,4 +16,6 @@ public interface AuthenticationService {
 
 	boolean isValidUserInfo(String name, String hashPwd, String salt);
 
+	boolean register(String name, String pwd);
+
 }

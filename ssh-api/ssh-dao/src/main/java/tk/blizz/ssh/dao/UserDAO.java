@@ -1,7 +1,5 @@
 package tk.blizz.ssh.dao;
 
-import java.util.List;
-
 import tk.blizz.ssh.model.User;
 
 public interface UserDAO extends GenericDAO<User, Long> {
@@ -11,6 +9,6 @@ public interface UserDAO extends GenericDAO<User, Long> {
 	 * @param name
 	 * @return
 	 */
-	List<User> findByUserName(String name);
+	User findByUserName(String name);
 
 }
