@@ -14,9 +14,17 @@ public class HelloAction extends ActionSupport {
 	private String username;
 	private String password;
 
-	class HelloWorld {
+	public class HelloWorld {
 		String hello;
 		String[] world;
+
+		public String getHello() {
+			return this.hello;
+		}
+
+		public String[] getWorld() {
+			return this.world;
+		}
 	}
 
 	private HelloWorld helloWorld;
@@ -79,6 +87,10 @@ public class HelloAction extends ActionSupport {
 		return this.helloWorld.world;
 	}
 
+	public HelloWorld getHelloWorld() {
+		return this.helloWorld;
+	}
+
 	// setters
 	public void setUsername(String username) {
 		this.username = username;
@@ -87,4 +99,5 @@ public class HelloAction extends ActionSupport {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 }
