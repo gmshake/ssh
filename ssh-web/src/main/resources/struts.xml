@@ -4,13 +4,25 @@
 <struts>
 	<constant name="struts.custom.i18n.resources" value="global" />
 	<constant name="struts.devMode" value="true" />
-
 	<constant name="struts.action.extension" value="action" />
 
-	<package name="default" namespace="/" extends="struts-default">
+	<package name="default" extends="struts-default">
 		<action name="hello" class="tk.blizz.ssh.action.HelloAction">
 			<result name="success">index.jsp</result>
 			<result name="error">bad.jsp</result>
+		</action>
+	</package>
+
+	<package name="user" namespace="/" extends="struts-default">
+		<action name="register" class="tk.blizz.ssh.action.RegisterAction">
+			<interceptor-ref name="token"/>
+			<interceptor-ref name="defaultStack"/>
+			<result name="input">register.jsp</result>
+			<result name="success">index.jsp</result>
+			<result name="error">bad.jsp</result>
+			<result name="invalid.token" type="redirect">
+				<param name="location">refresh.jsp</param>
+			</result>
 		</action>
 	</package>
 
