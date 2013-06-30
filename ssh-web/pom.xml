@@ -9,7 +9,7 @@
   <packaging>war</packaging>
   <properties>
   	<spring.version>3.1.4.RELEASE</spring.version>
-  	<struts2.version>2.3.14.2</struts2.version>
+  	<struts2.version>2.3.14.3</struts2.version>
   	<slf4j.version>1.7.5</slf4j.version>
   </properties>
   <dependencies>
@@ -59,23 +59,21 @@
   		<artifactId>struts2-jasperreports-plugin</artifactId>
   		<version>${struts2.version}</version>
   	</dependency>
+    <dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-core</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+    <dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-web</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
   	<dependency>
   		<groupId>javax.servlet</groupId>
   		<artifactId>javax.servlet-api</artifactId>
   		<version>3.0.1</version>
   		<scope>provided</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-core</artifactId>
-  		<version>${spring.version}</version>
-  		<scope>runtime</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework</groupId>
-  		<artifactId>spring-web</artifactId>
-  		<version>${spring.version}</version>
-  		<scope>runtime</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework</groupId>
