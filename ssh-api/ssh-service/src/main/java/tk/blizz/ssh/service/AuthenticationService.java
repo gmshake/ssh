@@ -18,4 +18,8 @@ public interface AuthenticationService {
 
 	boolean register(String name, String pwd);
 
+	User login(String name, String pwd);
+
+	User getUserById(Long id);
+
 }
