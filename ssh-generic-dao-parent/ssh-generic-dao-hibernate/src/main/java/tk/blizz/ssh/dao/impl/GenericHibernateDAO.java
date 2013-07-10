@@ -75,7 +75,7 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 	@SuppressWarnings("unchecked")
 	@Override
 	public E findById(PK id) {
-		return (E) getSession().load(this.entityName, id);
+		return (E) getSession().get(this.entityName, id);
 	}
 
 	/**
@@ -148,7 +148,8 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 	@SuppressWarnings("unchecked")
 	@Override
 	public E merge(T detachedEntity) {
-		E p = this.entityClass.cast(detachedEntity);
+		// E p = this.entityClass.cast(detachedEntity);
+		T p = detachedEntity;
 		return (E) getSession().merge(this.entityName, p);
 	}
 
@@ -168,7 +169,7 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> findAll() {
-		return createCriteria().setCacheable(true).list();
+		return createCriteria().list();
 	}
 
 	/**
@@ -182,8 +183,7 @@ public abstract class GenericHibernateDAO<T, E extends T, PK extends Serializabl
 
 	@SuppressWarnings("unchecked")
 	public E findUniqueByExample(T example) {
-		return (E) createCriteria().add(Example.create(example))
-				.setCacheable(true).uniqueResult();
+		return (E) createCriteria().add(Example.create(example)).uniqueResult();
 	}
 
 	/**
