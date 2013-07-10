@@ -92,4 +92,10 @@ public class User implements Serializable {
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("%s:(%d, %s, %s)", this.getClass().getName(),
+				this.id, this.name, this.password);
+	}
+
 }
