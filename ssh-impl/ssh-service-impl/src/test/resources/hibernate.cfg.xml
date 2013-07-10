@@ -19,8 +19,12 @@
 		<!-- Enable Hibernate's automatic session context management -->
 		<property name="current_session_context_class">thread</property>
 
-		<!-- Disable the second-level cache 
-		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>-->
+		<!-- Disable the second-level cache -->
+		<property name="cache.use_second_level_cache">false</property>
+
+		<property name="cache.use_query_cache">false</property>
+
+		<property name="cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
 
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
