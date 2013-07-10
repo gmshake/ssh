@@ -10,7 +10,10 @@
   <properties>
   	<spring.version>3.1.4.RELEASE</spring.version>
   	<struts2.version>2.3.14.3</struts2.version>
+  	<hibernate.version>4.1.12.Final</hibernate.version>
   	<slf4j.version>1.7.5</slf4j.version>
+  	<hsqldb.version>2.2.9</hsqldb.version>
+  	<jasper.version>4.7.1</jasper.version>
   </properties>
   <dependencies>
   	<dependency>
@@ -52,7 +55,7 @@
   	<dependency>
   		<groupId>net.sf.jasperreports</groupId>
   		<artifactId>jasperreports</artifactId>
-  		<version>4.7.1</version>
+  		<version>${jasper.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.struts</groupId>
@@ -96,8 +99,20 @@
   	<dependency>
   		<groupId>org.hsqldb</groupId>
   		<artifactId>hsqldb</artifactId>
-  		<version>2.2.9</version>
+  		<version>${hsqldb.version}</version>
   		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-ehcache</artifactId>
+  		<version>${hibernate.version}</version>
+  		<scope>runtime</scope>
+  		<exclusions>
+  			<exclusion>
+  				<groupId>org.slf4j</groupId>
+  				<artifactId>slf4j-api</artifactId>
+  			</exclusion>
+  		</exclusions>
   	</dependency>
   </dependencies>
   <build>
@@ -129,7 +144,7 @@
   				<dependency>
   					<groupId>net.sf.jasperreports</groupId>
   					<artifactId>jasperreports</artifactId>
-  					<version>4.7.1</version>
+  					<version>${jasper.version}</version>
   				</dependency>
   			</dependencies>
   		</plugin>
