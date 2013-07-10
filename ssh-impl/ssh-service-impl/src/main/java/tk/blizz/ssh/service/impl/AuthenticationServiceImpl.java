@@ -75,6 +75,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		return true;
 	}
 
+	@Override
+	public User login(String username, String password) {
+		User user = this.userDao.findByUserName(username);
+		if (user == null)
+			return null;
+		if (user.getPassword() != null && user.getPassword().equals(password))
+			return user;
+		else
+			return null;
+	}
+
+	@Override
+	public User getUserById(Long id) {
+		User user = this.userDao.findById(id);
+		return user;
+	}
+
 	// setters, injected by spring
 	/**
 	 * @param userDao
