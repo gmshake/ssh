@@ -16,5 +16,6 @@
   	<junit.version>4.8.2</junit.version>
   	<hibernate.version>4.1.12.Final</hibernate.version>
   	<jboss.logging.version>3.1.0.GA</jboss.logging.version>
+  	<hsqldb.version>2.2.9</hsqldb.version>
   </properties>
 </project>
