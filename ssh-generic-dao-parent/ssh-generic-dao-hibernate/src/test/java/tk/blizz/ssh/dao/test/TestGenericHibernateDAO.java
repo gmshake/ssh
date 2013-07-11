@@ -22,6 +22,14 @@ import tk.blizz.ssh.dao.impl.GenericHibernateDAO;
  * 
  */
 public class TestGenericHibernateDAO {
+	private final Configuration configuration = new Configuration()
+			.addAnnotatedClass(UserImpl.class).configure();
+	private final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
+			.applySettings(configuration.getProperties());
+
+	private final SessionFactory sessionFactory = configuration
+			.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
+
 	public class TestDAOImpl extends GenericHibernateDAO<User, UserImpl, Long> {
 		UserImpl findByName(String name) {
 			return super.findUniqueByExample(new UserImpl().setName(name));
@@ -35,25 +43,19 @@ public class TestGenericHibernateDAO {
 
 	private final TestDAOImpl dao = new TestDAOImpl();
 
+	private final TransactionWrapper wrapper = new TransactionWrapper(
+			this.sessionFactory);
+
 	@Before
 	public void setup() {
-		final Configuration configuration = new Configuration()
-				.addAnnotatedClass(UserImpl.class).configure();
-		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-
-		final SessionFactory sessionFactory = configuration
-				.buildSessionFactory(serviceRegistryBuilder
-						.buildServiceRegistry());
-
 		this.dao.setSessionFactory(sessionFactory);
 	}
 
 	@After
 	public void teardown() {
-		final SessionFactory sessionFactory = this.dao.getSessionFactory();
+		// final SessionFactory sessionFactory = this.dao.getSessionFactory();
 		this.dao.setSessionFactory(null);
-		sessionFactory.close();
+		// sessionFactory.close();
 	}
 
 	/**
@@ -62,11 +64,91 @@ public class TestGenericHibernateDAO {
 	 */
 	@Test
 	public void testFindById() {
-		assertTrue(true);
+		assertTrue(this.wrapper.run(new Block() {
+			@Override
+			public boolean execute() {
+				dao.save(new UserImpl().setName("Hello").setCName("World"));
+				return true;
+			}
+		}));
+
+		assertTrue(this.wrapper.run(new Block() {
+			@Override
+			public boolean execute() {
+				UserImpl u = dao.findById(1L);
+				System.out.println(u);
+				return "Hello".equals(u.getName());
+			}
+		}));
 	}
 
 	@Test
 	public void testSaves() {
+		final User u = new UserImpl().setName("hello").setCName("你好");
+		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
+
+			@Override
+			protected boolean go() {
+				this.dao.save(u);
+				return true;
+			}
+
+		}.run());
+
+		/**
+		 * unique constraint on 'name'
+		 */
+		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
+
+			@Override
+			protected boolean go() {
+				this.dao.save(u);
+				return true;
+			}
+
+		}.run());
+
+		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
+
+			@Override
+			protected boolean go() {
+				this.dao.save(u.setName("world"));
+				return true;
+			}
+
+		}.run());
+
+		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
+
+			@Override
+			protected boolean go() {
+				this.dao.merge(u);
+				return true;
+			}
+
+		}.run());
+
+		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
+			@Override
+			protected boolean go() {
+				this.dao.save(u);
+				return true;
+			}
+
+		}.run());
+
+		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
+			@Override
+			protected boolean go() {
+				this.dao.update(u);
+				return true;
+			}
+
+		}.run());
+	}
+
+	@Test
+	public void testSaves2() {
 		final User u = new UserImpl().setName("hello").setCName("你好");
 		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
 
