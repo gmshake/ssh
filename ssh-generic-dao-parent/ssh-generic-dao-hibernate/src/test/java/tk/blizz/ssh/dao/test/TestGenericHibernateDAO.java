@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cache.ehcache.EhCacheRegionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.junit.After;
@@ -34,17 +33,10 @@ public class TestGenericHibernateDAO {
 		}
 	}
 
-	private final org.hsqldb.server.Server server = new org.hsqldb.server.Server();
 	private final TestDAOImpl dao = new TestDAOImpl();
-
-	EhCacheRegionFactory u;
 
 	@Before
 	public void setup() {
-		this.server.setDatabaseName(0, "memdb");
-		this.server.setDatabasePath(0, "mem:memdb");
-		this.server.start();
-
 		final Configuration configuration = new Configuration()
 				.addAnnotatedClass(UserImpl.class).configure();
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
@@ -62,10 +54,6 @@ public class TestGenericHibernateDAO {
 		final SessionFactory sessionFactory = this.dao.getSessionFactory();
 		this.dao.setSessionFactory(null);
 		sessionFactory.close();
-
-		this.server.signalCloseAllServerConnections();
-		this.server.stop();
-		this.server.shutdown();
 	}
 
 	/**
