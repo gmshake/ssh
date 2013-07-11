@@ -162,10 +162,6 @@ public class TestGenericHibernateDAO {
 				System.out.println(f);
 
 				f.setName("test");
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-				}
 				this.dao.update(f);
 				System.out.println(f);
 
