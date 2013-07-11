@@ -83,148 +83,125 @@ public class TestGenericHibernateDAO {
 	}
 
 	@Test
-	public void testSaves() {
-		final User u = new UserImpl().setName("hello").setCName("你好");
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+	public void testFindById2() {
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u);
+			public boolean execute() {
+				dao.save(new UserImpl().setName("Hello").setCName("World"));
 				return true;
 			}
+		}));
 
-		}.run());
-
-		/**
-		 * unique constraint on 'name'
-		 */
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u);
-				return true;
+			public boolean execute() {
+				UserImpl u = dao.findById(1L);
+				System.out.println(u);
+				return "Hello".equals(u.getName());
 			}
-
-		}.run());
-
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
-			@Override
-			protected boolean go() {
-				this.dao.save(u.setName("world"));
-				return true;
-			}
-
-		}.run());
-
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
-			@Override
-			protected boolean go() {
-				this.dao.merge(u);
-				return true;
-			}
-
-		}.run());
-
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-			@Override
-			protected boolean go() {
-				this.dao.save(u);
-				return true;
-			}
-
-		}.run());
-
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-			@Override
-			protected boolean go() {
-				this.dao.update(u);
-				return true;
-			}
-
-		}.run());
+		}));
 	}
 
 	@Test
-	public void testSaves2() {
-		final User u = new UserImpl().setName("hello").setCName("你好");
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+	public void testFindById3() {
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u);
+			public boolean execute() {
+				dao.save(new UserImpl().setName("Hello").setCName("World"));
+				return true;
+			}
+		}));
+
+		assertTrue(this.wrapper.run(new Block() {
+			@Override
+			public boolean execute() {
+				UserImpl u = dao.findById(1L);
+				System.out.println(u);
+				return "Hello".equals(u.getName());
+			}
+		}));
+	}
+
+	@Test
+	public void testSaves() {
+		final User u = new UserImpl().setName("hello").setCName("你好");
+		assertTrue(this.wrapper.run(new Block() {
+			@Override
+			public boolean execute() {
+				dao.save(u);
 				return true;
 			}
 
-		}.run());
+		}));
 
 		/**
 		 * unique constraint on 'name'
 		 */
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		assertFalse(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u);
+			public boolean execute() {
+				dao.save(u);
 				return true;
 			}
 
-		}.run());
+		}));
 
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		/**
+		 * another instance
+		 */
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u.setName("world"));
+			public boolean execute() {
+				dao.save(u.setName("world"));
 				return true;
 			}
+		}));
 
-		}.run());
-
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		/**
+		 * merge
+		 */
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.merge(u);
+			public boolean execute() {
+				dao.merge(u);
 				return true;
 			}
+		}));
 
-		}.run());
-
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		/**
+		 * unique constraint on 'name'
+		 */
+		assertFalse(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.save(u);
+			public boolean execute() {
+				dao.save(u);
 				return true;
 			}
+		}));
 
-		}.run());
-
-		assertFalse(new DaoWrapper<TestDAOImpl>(this.dao) {
-
+		/**
+		 * update detached instance
+		 */
+		assertFalse(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				this.dao.update(u);
+			public boolean execute() {
+				dao.update(u);
 				return true;
 			}
-
-		}.run());
+		}));
 	}
 
 	@Test
 	public void testSave() throws Exception {
-		assertTrue(new DaoWrapper<TestDAOImpl>(this.dao) {
+		assertTrue(this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
+			public boolean execute() {
 				User e = new UserImpl();
 				e.setName("Hello");
 				e.setCName("你好");
-				this.dao.save(e);
+				dao.save(e);
 
-				User f = this.dao.findById(e.getId());
+				User f = dao.findById(e.getId());
 				assertTrue(f != null);
 				assertTrue(e.getName().equals(f.getName()));
 				assertTrue(e.getCName().equals(f.getCName()));
@@ -232,10 +209,11 @@ public class TestGenericHibernateDAO {
 				System.out.println(f);
 
 				f.setName("test");
-				this.dao.update(f);
+				dao.update(f);
 				System.out.println(f);
 
 				User t = new User() {
+					private static final long serialVersionUID = 1L;
 					private Long id;
 					private String name;
 					private String cname;
@@ -274,7 +252,7 @@ public class TestGenericHibernateDAO {
 					}
 				}.setName("test").setCName("测试");
 
-				this.dao.persist(t);
+				dao.persist(t);
 
 				// dao.update(new UserImpl().setId(3L));
 
@@ -284,36 +262,33 @@ public class TestGenericHibernateDAO {
 
 				User u = new UserImpl() {
 				}.setName("test2").setCName("测试2");
-				this.dao.save(u);
+				dao.save(u);
 				u.setName("test22");
-				this.dao.save(u);
+				dao.save(u);
 				u.setName("test222");
-				this.dao.persist(u);
+				dao.persist(u);
 
 				System.out.println(u);
 
-				User uu = this.dao.findByName("test");
+				User uu = dao.findByName("test");
 				System.out.println(uu);
 
-				User uu2 = this.dao.findById(uu.getId());
+				User uu2 = dao.findById(uu.getId());
 				System.out.println(uu2);
 
 				return true;
 			}
-		}.run());
+		}));
 
-		new DaoWrapper<GenericHibernateDAO<?, ?, ?>>(this.dao) {
-
+		this.wrapper.run(new Block() {
 			@Override
-			protected boolean go() {
-				TestDAOImpl dao = (TestDAOImpl) this.dao;
-
+			public boolean execute() {
 				List<UserImpl> us = dao.findAll();
 				for (UserImpl u : us) {
 					System.out.println(u);
 				}
 				return true;
 			}
-		}.run();
+		});
 	}
 }
