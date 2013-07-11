@@ -15,14 +15,14 @@ public abstract class TestBase {
 
 	@Before
 	public void setup() {
-		this.server.setDatabaseName(0, "memdb");
-		this.server.setDatabasePath(0, "mem:memdb");
-		this.server.start();
+		// this.server.setDatabaseName(0, "memdb");
+		// this.server.setDatabasePath(0, "mem:memdb");
+		// this.server.start();
 	}
 
 	@After
 	public void teardown() {
-		this.server.shutdown();
+		// this.server.shutdown();
 	}
 
 	protected Server getServer() {

@@ -32,8 +32,6 @@ public class TestUserDAO extends TestBase {
 	@Override
 	@Before
 	public void setup() {
-		super.setup();
-
 		final Configuration configuration = new Configuration().configure();
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -58,8 +56,6 @@ public class TestUserDAO extends TestBase {
 		final SessionFactory sf = this.userDao.getSessionFactory();
 		this.userDao.setSessionFactory(null);
 		sf.close();
-
-		super.teardown();
 	}
 
 	@Test

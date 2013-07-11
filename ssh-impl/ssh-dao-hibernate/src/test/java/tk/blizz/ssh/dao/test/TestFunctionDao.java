@@ -35,8 +35,6 @@ public class TestFunctionDao extends TestBase {
 	@Override
 	@Before
 	public void setup() {
-		super.setup();
-
 		final Configuration configuration = new Configuration().configure()
 				.addAnnotatedClass(FunctionImpl.class);
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
@@ -61,8 +59,6 @@ public class TestFunctionDao extends TestBase {
 
 		final SessionFactory sf = this.dao.getSessionFactory();
 		sf.close();
-
-		super.teardown();
 	}
 
 	@Test
