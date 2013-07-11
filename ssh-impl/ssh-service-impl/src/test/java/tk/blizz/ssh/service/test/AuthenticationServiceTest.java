@@ -27,7 +27,6 @@ import tk.blizz.ssh.service.impl.SystemManageServiceImpl;
  * 
  */
 public class AuthenticationServiceTest {
-	org.hsqldb.server.Server server;
 	private SessionFactory sessionFactory;
 
 	private final AuthenticationServiceImpl auth = new AuthenticationServiceImpl();
@@ -36,12 +35,6 @@ public class AuthenticationServiceTest {
 
 	@Before
 	public void setup() {
-		// setup hsqldb
-		this.server = new org.hsqldb.server.Server();
-		this.server.setDatabaseName(0, "memdb");
-		this.server.setDatabasePath(0, "mem:memdb");
-		this.server.start();
-
 		final Configuration configuration = new Configuration().configure();
 		final ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -84,8 +77,6 @@ public class AuthenticationServiceTest {
 	@After
 	public void teardown() {
 		this.sessionFactory.close();
-
-		this.server.shutdown();
 	}
 
 	@Test
