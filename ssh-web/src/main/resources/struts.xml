@@ -24,7 +24,7 @@
 			</interceptor-stack>
 		</interceptors>
 		<action name="register" class="tk.blizz.ssh.action.RegisterAction">
-			<interceptor-ref name="stackWithToken"/>
+			<interceptor-ref name="defaultStack"/>
 			<result name="input">register.jsp</result>
 			<result name="success">index.jsp</result>
 			<result name="error">bad.jsp</result>
@@ -39,6 +39,17 @@
 		</action>
 	</package>
 
+	<package name="management" namespace="management" extends="struts-default">
+		<interceptors>
+			<interceptor name="auth" class="tk.blizz.ssh.interceptor.AuthenticationInterceptor"/>
+			<interceptor-stack name="loginRequiredStack">
+				<interceptor-ref name="auth"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="loginRequiredStack"/>
+	</package>
+
 	<package name="json" namespace="/" extends="json-default">
 		<action name="jsonHello" class="tk.blizz.ssh.action.HelloAction"
 			method="jsonHello">
@@ -47,7 +58,7 @@
 		</action>
 	</package>
 
-	<package name="report" namespace="/" extends="struts-default">
+	<package name="report" namespace="/" extends="management">
 		<result-types>
 			<result-type name="jasper"
 				class="org.apache.struts2.views.jasperreports.JasperReportsResult" />
