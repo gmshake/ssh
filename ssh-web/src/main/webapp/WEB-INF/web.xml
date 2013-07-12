@@ -1,5 +1,6 @@
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 
@@ -14,6 +15,16 @@
 	<listener>
 		<description>Spring Web Context Loader Listener</description>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<listener>
+		<description>Web Context Listener</description>
+		<listener-class>tk.blizz.ssh.web.utils.ContextListener</listener-class>
+	</listener>
+	
+	<listener>
+		<description>Web Session Listener</description>
+		<listener-class>tk.blizz.ssh.web.utils.SessionListener</listener-class>
 	</listener>
 	
 	<filter>

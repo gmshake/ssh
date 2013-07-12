@@ -14,15 +14,28 @@
 	</package>
 
 	<package name="user" namespace="/" extends="struts-default">
+		<interceptors>
+			<interceptor-stack name="stackWithToken">
+				<interceptor-ref name="token"/>
+				<interceptor-ref name="params">
+					<param name="excludeParams">^token$,dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
 		<action name="register" class="tk.blizz.ssh.action.RegisterAction">
-			<interceptor-ref name="token"/>
-			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="stackWithToken"/>
 			<result name="input">register.jsp</result>
 			<result name="success">index.jsp</result>
 			<result name="error">bad.jsp</result>
 			<result name="invalid.token" type="redirect">
 				<param name="location">refresh.jsp</param>
 			</result>
+		</action>
+		<action name="login" class="tk.blizz.ssh.action.LoginAction">
+			<result name="input" type="redirect">login.jsp</result>
+			<result name="success">welcome.jsp</result>
+			<result name="error" type="redirect">login.jsp</result>
 		</action>
 	</package>
 
