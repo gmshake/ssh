@@ -8,6 +8,7 @@
     <property name="beans">
         <map>               
             <entry key="tk.blizz.ssh:name=hibernateStatistics" value-ref="hibernateStatisticsMBean" />
+            <entry key="tk.blizz.ssh:name=log4jManager" value-ref="log4jManagerMBean" />
         </map>
     </property>
 </bean>
@@ -22,5 +23,7 @@
     <property name="statisticsEnabled" value="true" />
     <property name="sessionFactory" ref="sessionFactory" />
 </bean>
+
+<bean id="log4jManagerMBean" class="tk.blizz.utils.jmx.Log4jManager"></bean>
 
 </beans>
