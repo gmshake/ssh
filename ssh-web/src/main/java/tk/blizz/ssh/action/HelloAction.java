@@ -1,6 +1,8 @@
 package tk.blizz.ssh.action;
 
 import org.apache.struts2.ServletActionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -10,6 +12,9 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class HelloAction extends ActionSupport {
 	private static final long serialVersionUID = 2013052701L;
+
+	private static final Logger log = LoggerFactory
+			.getLogger(HelloAction.class);
 
 	private String username;
 	private String password;
@@ -31,9 +36,11 @@ public class HelloAction extends ActionSupport {
 
 	@Override
 	public void validate() {
-		if (this.username == null || this.password == null) {
-			throw new NullPointerException("username or password required!!!");
-		}
+		log.debug("validate username and password...");
+		if (this.username == null)
+			addFieldError("username", "username required");
+		if (this.password == null)
+			addFieldError("password", "password required");
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class HelloAction extends ActionSupport {
 		h.world = new String[] { "World1", "World2", "World3", "wOrld4" };
 
 		this.helloWorld = h;
-
+		addActionMessage("hi");
 		return SUCCESS;
 	}
 

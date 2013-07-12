@@ -13,13 +13,11 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		log.debug("context initialized");
-
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		log.debug("context destroyed");
-
 	}
 
 }
