@@ -18,7 +18,7 @@
 			<interceptor-stack name="stackWithToken">
 				<interceptor-ref name="token"/>
 				<interceptor-ref name="params">
-					<param name="excludeParams">^token$,dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+					<param name="excludeParams">^struts\.token\.name,^token,dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
 				</interceptor-ref>
 				<interceptor-ref name="defaultStack"/>
 			</interceptor-stack>
@@ -37,6 +37,9 @@
 			<result name="success">welcome.jsp</result>
 			<result name="error" type="redirect">login.jsp</result>
 		</action>
+		<action name="logout" class="tk.blizz.ssh.action.LogoutAction">
+			<result type="redirect">login.jsp</result>
+		</action>
 	</package>
 
 	<package name="management" namespace="management" extends="struts-default">
@@ -48,6 +51,9 @@
 			</interceptor-stack>
 		</interceptors>
 		<default-interceptor-ref name="loginRequiredStack"/>
+		<global-results>
+			<result name="login" type="redirect">login.jsp</result>
+		</global-results>
 	</package>
 
 	<package name="json" namespace="/" extends="json-default">
