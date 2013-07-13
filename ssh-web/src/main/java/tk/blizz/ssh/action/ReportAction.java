@@ -89,7 +89,7 @@ public class ReportAction extends ActionSupport {
 	}
 
 	public String getReportLocation() {
-		File file = new File("/reports/", this.reportName + ".jasper");
+		File file = new File("/WEB-INF/reports/", this.reportName + ".jasper");
 		return file.getAbsolutePath();
 	}
 

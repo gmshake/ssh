@@ -9,7 +9,7 @@
 	<context-param>
 		<description>Spring Context Parameters</description>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/*Context.xml</param-value>
+		<param-value>/WEB-INF/context/*Context.xml</param-value>
 	</context-param>
 	
 	<listener>
@@ -41,6 +41,21 @@
 		<url-pattern>*.action</url-pattern>
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
+	
+	<session-config>
+		<session-timeout>1</session-timeout>
+	</session-config>
+	<!-- 
+	<post-construct>
+		<lifecycle-callback-class>org.springframework.web.context.ContextLoaderListener</lifecycle-callback-class>
+		<lifecycle-callback-method>postConstruct</lifecycle-callback-method>
+	</post-construct>
+	
+	<pre-destroy>
+		<lifecycle-callback-class>org.springframework.web.context.ContextLoaderListener</lifecycle-callback-class>
+		<lifecycle-callback-method>doDestroy</lifecycle-callback-method>
+	</pre-destroy>
+	 -->
 	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

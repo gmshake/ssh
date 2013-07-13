@@ -9,7 +9,7 @@
   <packaging>war</packaging>
   <properties>
   	<spring.version>3.1.4.RELEASE</spring.version>
-  	<struts2.version>2.3.14.3</struts2.version>
+  	<struts2.version>2.3.15</struts2.version>
   	<hibernate.version>4.1.12.Final</hibernate.version>
   	<slf4j.version>1.7.5</slf4j.version>
   	<hsqldb.version>2.2.9</hsqldb.version>
@@ -116,21 +116,35 @@
   	</dependency>
   </dependencies>
   <build>
-  	<finalName>${artifactId}-${version}.war</finalName>
+  	<resources>
+  		<resource>
+  			<directory>${basedir}/src/main/resources</directory>
+  			<excludes>
+  				<exclude>reports/*</exclude>
+  				<exclude>context/*</exclude>
+  			</excludes>
+  		</resource>
+  		<resource>
+  			<directory>${basedir}/src/main/resources/context</directory>
+  			<includes>
+  				<include>*Context.xml</include>
+  			</includes>
+  			<targetPath>${project.build.directory}/${project.build.finalName}/WEB-INF/context</targetPath>
+  		</resource>
+  	</resources>
   	<plugins>
   		<plugin>
   			<groupId>org.mortbay.jetty</groupId>
   			<artifactId>jetty-maven-plugin</artifactId>
-  			<version>8.1.10.v20130312</version>
+  			<version>8.1.11.v20130520</version>
   		</plugin>
   		<plugin>
   			<groupId>org.codehaus.mojo</groupId>
   			<artifactId>jasperreports-maven-plugin</artifactId>
-  			
   			<configuration>
   				<sourceDirectory>${basedir}/src/main/resources/reports</sourceDirectory>
   				<sourceFileExt>.jrxml</sourceFileExt>
-  				<outputDirectory>${basedir}/src/main/webapp/reports</outputDirectory>
+  				<outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/reports</outputDirectory>
   			</configuration>
   			<executions>
   				<execution>
