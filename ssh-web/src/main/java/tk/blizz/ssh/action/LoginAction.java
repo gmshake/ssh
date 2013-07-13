@@ -28,6 +28,8 @@ public class LoginAction extends ActionSupport {
 
 		User user = authenticationService.login(this.username, this.password);
 		if (user != null) {
+			ServletActionContext.getRequest().getSession()
+					.setAttribute("userid", user.getId());
 			addActionMessage("valid user");
 			return SUCCESS;
 		} else {
