@@ -4,35 +4,61 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import tk.blizz.ssh.action.LoginAction;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import com.opensymphony.xwork2.util.logging.Logger;
+import com.opensymphony.xwork2.util.logging.LoggerFactory;
 
+/**
+ * Interceptor check if user require login
+ * 
+ * @author zlei.huang@gmail.com
+ * 
+ */
 public class AuthenticationInterceptor extends AbstractInterceptor {
-	private static final Logger log = LoggerFactory
+	private static final long serialVersionUID = 4426192299112482045L;
+
+	private static final Logger LOG = LoggerFactory
 			.getLogger(AuthenticationInterceptor.class);
 
-	private static final String USERID = "userId";
+	private static final String USERID = "userid";
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Check Authentication");
+		}
+
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
-		String result = null;
-		if (!isAllowed(request, invocation.getAction())) {
-			result = handleRedirect(invocation, response);
-		} else {
-			result = invocation.invoke();
+
+		if (!isAllowed(request, invocation))
+			return handleRedirect(invocation, response);
+
+		return invocation.invoke();
+	}
+
+	protected boolean isLoginRequiedAction(Object action) {
+		// sb: if the action doesn't require sign-in, then let it through.
+		LoginRequired r = action.getClass().getAnnotation(LoginRequired.class);
+		if (r != null && !r.loginRequired()) {
+			return false;
 		}
-		return result;
+
+		// sb: if this request does require login and the current action is
+		// not the login action, then redirect the user
+		if (action instanceof LoginAction) {
+			return false;
+		}
+
+		// if in white list
+		// return false
+		return true;
 	}
 
 	/**
@@ -44,37 +70,30 @@ public class AuthenticationInterceptor extends AbstractInterceptor {
 	 *            The action object
 	 * @return True if allowed, false otherwise
 	 */
-	protected boolean isAllowed(HttpServletRequest request, Object action) {
-		HttpSession session = request.getSession(true);
-		synchronized (session) {
-			if (session.isNew()) {
-				log.debug("new session: {?}", session.getId());
-			}
-		}
+	protected boolean isAllowed(HttpServletRequest request,
+			ActionInvocation invocation) {
+		// HttpSession httpSession = request.getSession(true);
+		// synchronized (httpSession) {
+		// if (httpSession.isNew()) {
+		// if (LOG.isDebugEnabled())
+		// LOG.debug("new session: #0", httpSession.getId());
+		// }
+		// }
 
-		Map<String, Object> actionSession = ActionContext.getContext()
+		if (!isLoginRequiedAction(invocation.getAction()))
+			return true;
+
+		Map<String, Object> session = invocation.getInvocationContext()
 				.getSession();
 
-		// sb: if the action doesn't require sign-in, then let it through.
-		if (!(action instanceof LoginRequired)) {
-			return true;
-		}
-
-		Integer userId = (Integer) session.getAttribute(USERID);
+		Long userId = (Long) session.get(USERID);
 
 		if (userId != null) {
-			log.debug("userid in session: {?}", userId);
+			if (LOG.isDebugEnabled())
+				LOG.debug("userid in session: #0", userId);
 			return true;
 		}
 
-		// sb: if this request does require login and the current action is
-		// not the login action, then redirect the user
-		if (!(action instanceof LoginAction)) {
-			return false;
-		}
-
-		// sb: they either requested the login page or are submitting their
-		// login now, let it through
 		return false;
 	}
 
@@ -92,10 +111,21 @@ public class AuthenticationInterceptor extends AbstractInterceptor {
 		return null;
 	}
 
+	/**
+	 * Handles a redirect to login page
+	 * 
+	 * @param invocation
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	protected String handleRedirect(ActionInvocation invocation,
 			HttpServletResponse response) throws Exception {
-		response.sendError(HttpServletResponse.SC_FORBIDDEN);
-		return "loginRedirect";
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Redirect to login page");
+		}
+		// response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		return "login";
 	}
 
 }

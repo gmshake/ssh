@@ -10,11 +10,11 @@ import java.lang.annotation.Target;
  * Specifies that the class is authentication required. This annotation is
  * applied to the entity class.
  * 
- * @author Joshua Bloch
- * @since 1.5
+ * @author zlei.huang@gmail.com
+ * 
  */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface LoginRequired {
-
+	boolean loginRequired() default true;
 }
