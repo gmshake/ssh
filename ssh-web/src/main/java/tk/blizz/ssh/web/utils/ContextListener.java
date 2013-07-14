@@ -1,5 +1,7 @@
 package tk.blizz.ssh.web.utils;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -18,6 +20,16 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		log.debug("context destroyed");
+	}
+
+	@PostConstruct
+	public void postConstruct() {
+		log.info("context is constructed...");
+	}
+
+	@PreDestroy
+	public void doDestroy() {
+		log.info("context is to be destroyed...");
 	}
 
 }

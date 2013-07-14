@@ -1,4 +1,4 @@
-package tk.blizz.ssh.action;
+package tk.blizz.ssh.web.actions;
 
 import java.io.File;
 import java.io.FileInputStream;

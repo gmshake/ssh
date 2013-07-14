@@ -1,4 +1,4 @@
-package tk.blizz.ssh.action;
+package tk.blizz.ssh.web.actions;
 
 import javax.servlet.http.HttpSession;
 

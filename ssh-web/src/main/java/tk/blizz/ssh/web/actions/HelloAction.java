@@ -1,4 +1,4 @@
-package tk.blizz.ssh.action;
+package tk.blizz.ssh.web.actions;
 
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
