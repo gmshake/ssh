@@ -83,7 +83,9 @@ public class TestFunctionDao extends TestBase {
 			System.out.println("-----------------------------------");
 
 			assertTrue(u.getName().equals(f.getName()));
-			assertTrue(u.getUrl().equals(f.getUrl()));
+			assertEquals(u.getUrl().toExternalForm(), f.getUrl()
+					.toExternalForm());
+			// assertTrue(u.getUrl().equals(f.getUrl()));
 
 			List<FunctionImpl> fs = this.dao.findAll();
 			System.out.println("-----------------------------------");

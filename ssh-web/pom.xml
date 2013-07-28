@@ -13,7 +13,9 @@
   	<hibernate.version>4.1.12.Final</hibernate.version>
   	<slf4j.version>1.7.5</slf4j.version>
   	<hsqldb.version>2.2.9</hsqldb.version>
+  	<javaee.version>6.0</javaee.version>
   	<jasper.version>4.7.1</jasper.version>
+  	<javassist.version>3.16.1-GA</javassist.version>
   </properties>
   <dependencies>
   	<dependency>
@@ -30,6 +32,17 @@
   		<groupId>org.apache.struts</groupId>
   		<artifactId>struts2-core</artifactId>
   		<version>${struts2.version}</version>
+  		<exclusions>
+  			<exclusion>
+  				<groupId>javassist</groupId>
+  				<artifactId>javassist</artifactId>
+  			</exclusion>
+  		</exclusions>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.javassist</groupId>
+  		<artifactId>javassist</artifactId>
+  		<version>${javassist.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.struts</groupId>
@@ -56,6 +69,38 @@
   		<groupId>net.sf.jasperreports</groupId>
   		<artifactId>jasperreports</artifactId>
   		<version>${jasper.version}</version>
+  		<exclusions>
+  			<exclusion>
+  				<groupId>bouncycastle</groupId>
+  				<artifactId>bcmail-jdk14</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>bouncycastle</groupId>
+  				<artifactId>bcprov-jdk14</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>stax</groupId>
+  				<artifactId>stax-api</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>org.apache.geronimo.specs</groupId>
+  				<artifactId>geronimo-stax-api_1.0_spec</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>xml-apis</groupId>
+  				<artifactId>xml-apis</artifactId>
+  			</exclusion>
+  		</exclusions>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.bouncycastle</groupId>
+  		<artifactId>bcmail-jdk14</artifactId>
+  		<version>1.38</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.bouncycastle</groupId>
+  		<artifactId>bcprov-jdk14</artifactId>
+  		<version>1.38</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.struts</groupId>
@@ -72,10 +117,18 @@
   		<artifactId>spring-web</artifactId>
   		<version>${spring.version}</version>
   	</dependency>
+  	<!--
   	<dependency>
   		<groupId>javax.servlet</groupId>
   		<artifactId>javax.servlet-api</artifactId>
   		<version>3.0.1</version>
+  		<scope>provided</scope>
+  	</dependency>
+  	-->
+  	<dependency>
+  		<groupId>javax</groupId>
+  		<artifactId>javaee-api</artifactId>
+  		<version>${javaee.version}</version>
   		<scope>provided</scope>
   	</dependency>
   	<dependency>
@@ -111,6 +164,10 @@
   			<exclusion>
   				<groupId>org.slf4j</groupId>
   				<artifactId>slf4j-api</artifactId>
+  			</exclusion>
+  			<exclusion>
+  				<groupId>org.hibernate.javax.persistence</groupId>
+  				<artifactId>hibernate-jpa-2.0-api</artifactId>
   			</exclusion>
   		</exclusions>
   	</dependency>

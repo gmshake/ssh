@@ -13,9 +13,11 @@
   	<module>ssh-service-impl</module>
   </modules>
   <properties>
-  	<junit.version>4.8.2</junit.version>
-  	<hibernate.version>4.1.12.Final</hibernate.version>
+    <hibernate.version>4.1.12.Final</hibernate.version>
+    <hsqldb.version>2.2.9</hsqldb.version>
+    <javaee.version>6.0</javaee.version>
+    <javassist.version>3.16.1-GA</javassist.version>
   	<jboss.logging.version>3.1.0.GA</jboss.logging.version>
-  	<hsqldb.version>2.2.9</hsqldb.version>
+  	<junit.version>4.8.2</junit.version>
   </properties>
 </project>
