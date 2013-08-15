@@ -23,7 +23,7 @@
 		<filter-class>tk.blizz.ssh.web.utils.filter.SessionFilter</filter-class>
 		<init-param>
 			<param-name>welcome</param-name>
-			<param-value>/index.html</param-value>
+			<param-value>/index.jsp</param-value>
 		</init-param>
 		<init-param>
 			<param-name>exclude</param-name>

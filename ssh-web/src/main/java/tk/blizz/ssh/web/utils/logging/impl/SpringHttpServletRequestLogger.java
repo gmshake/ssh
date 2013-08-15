@@ -56,6 +56,7 @@ public class SpringHttpServletRequestLogger implements HttpServletRequestLogger 
 		map.put("maxAge", String.valueOf(cookie.getMaxAge()));
 		map.put("secure", String.valueOf(cookie.getSecure()));
 		map.put("version", String.valueOf(cookie.getVersion()));
+		map.put("httpOnly", String.valueOf(cookie.isHttpOnly()));
 		map.put("comment", cookie.getComment());
 		return map;
 	}
