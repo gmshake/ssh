@@ -13,4 +13,8 @@
     <property name="roleDao" ref="roleDao" />
 </bean>
 
+<bean id="httpServletRequestLogger" class="tk.blizz.ssh.web.utils.logging.impl.SpringHttpServletRequestLogger">
+    
+</bean>
+
 </beans>

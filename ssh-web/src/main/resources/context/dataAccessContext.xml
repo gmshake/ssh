@@ -10,4 +10,8 @@
     <property name="sessionFactory" ref="sessionFactory" />
 </bean>
 
+<bean id="sessionDao" class="tk.blizz.ssh.dao.impl.ServletSessionDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory" />
+</bean>
+
 </beans>

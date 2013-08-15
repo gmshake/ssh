@@ -17,7 +17,7 @@ public class RequestListener implements ServletRequestListener {
 	private static final Logger log = LoggerFactory
 			.getLogger(RequestListener.class);
 
-	private final AtomicLong requestCount = new AtomicLong();
+	private final AtomicLong id = new AtomicLong();
 
 	private final LogFactory loggerFactory = new SpringLogFactory();
 
@@ -25,11 +25,14 @@ public class RequestListener implements ServletRequestListener {
 	public void requestInitialized(ServletRequestEvent event) {
 		// final ServletContext context = event.getServletContext();
 		final ServletRequest request = event.getServletRequest();
-		final long count = this.requestCount.incrementAndGet();
+		final long id = this.id.getAndIncrement();
+
+		request.setAttribute(RequestListener.class.getName(), id);
+		log.debug("request {} initialized", id);
 
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
-			log.debug("request count: {}", count);
+			log.debug("log request ...");
 			loggerFactory.getHttpServletRequestLogger().log(req);
 			log.debug("wait a second...");
 			try {
@@ -43,7 +46,9 @@ public class RequestListener implements ServletRequestListener {
 
 	@Override
 	public void requestDestroyed(ServletRequestEvent event) {
-		log.debug("request destroyed");
+		final ServletRequest request = event.getServletRequest();
+		final Object id = request.getAttribute(RequestListener.class.getName());
+		log.debug("request {} destroyed", id);
 	}
 
 }
